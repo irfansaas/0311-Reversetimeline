@@ -1,3 +1,12 @@
+#!/usr/bin/env bash
+
+echo "Updating BusinessCaseContext with Timeline Integration..."
+echo ""
+
+# Create backup
+cp src/contexts/BusinessCaseContext.jsx src/contexts/BusinessCaseContext.jsx.manual_backup
+
+cat > src/contexts/BusinessCaseContext.jsx <<'EOF'
 import { useTimelineCalculator } from '../hooks/useTimelineCalculator';
 import { calculateBusinessCaseFull } from '../lib/ve-engine';
 import React, { createContext, useContext, useState, useEffect } from 'react';
@@ -153,3 +162,14 @@ export const BusinessCaseProvider = ({ children }) => {
     </BusinessCaseContext.Provider>
   );
 };
+EOF
+
+echo "✓ Updated BusinessCaseContext.jsx with timeline integration"
+echo ""
+echo "Changes made:"
+echo "  1. Added useTimelineCalculator at component level"
+echo "  2. Timeline calculated whenever customerProfile changes"
+echo "  3. Timeline passed to calculateBusinessCaseFull"
+echo "  4. timelineSummary exported in context value"
+echo ""
+echo "Now rebuild: npm run build && npm run preview"

@@ -50,23 +50,17 @@ export function generateBusinessCasePDF(calculations) {
   // Helper function to draw colored box
   const drawBox = (x, y, width, height, color, text, subtext = null) => {
     doc.setFillColor(...color);
-    try {
-      doc.roundedRect(x, y, width, height, 3, 3, 'F');
-    } catch(e) { /* skip */ }
+    doc.roundedRect(x, y, width, height, 3, 3, 'F');
     
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    try {
-      doc.text(text, x + width / 2, y + 8, { align: 'center' });
-    } catch(e) { /* skip */ }
+    doc.text(text, x + width / 2, y + 8, { align: 'center' });
     
     if (subtext) {
       doc.setFontSize(24);
       doc.setFont('helvetica', 'bold');
-      try {
-        doc.text(subtext, x + width / 2, y + 20, { align: 'center' });
-      } catch(e) { /* skip */ }
+      doc.text(subtext, x + width / 2, y + 20, { align: 'center' });
     }
   };
 
@@ -76,22 +70,16 @@ export function generateBusinessCasePDF(calculations) {
   
   // Header with logos
   doc.setFillColor(...colors.nerdio);
-  try {
-    doc.rect(0, 0, pageWidth, 40, 'F');
-  } catch(e) { /* skip */ }
+  doc.rect(0, 0, pageWidth, 40, 'F');
   
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(28);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('BUSINESS CASE SUMMARY', pageWidth / 2, 20, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text('BUSINESS CASE SUMMARY', pageWidth / 2, 20, { align: 'center' });
   
   doc.setFontSize(14);
   doc.setFont('helvetica', 'normal');
-  try {
-    doc.text(customerProfile.companyName, pageWidth / 2, 30, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text(customerProfile.companyName, pageWidth / 2, 30, { align: 'center' });
   
   currentY = 50;
   
@@ -104,23 +92,17 @@ export function generateBusinessCasePDF(calculations) {
   };
   
   doc.setFillColor(...colors.success);
-  try {
-    doc.roundedRect(savingsBox.x, savingsBox.y, savingsBox.width, savingsBox.height, 5, 5, 'F');
-  } catch(e) { /* skip */ }
+  doc.roundedRect(savingsBox.x, savingsBox.y, savingsBox.width, savingsBox.height, 5, 5, 'F');
   
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('3-YEAR TOTAL SAVINGS', pageWidth / 2, currentY + 10, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text('3-YEAR TOTAL SAVINGS', pageWidth / 2, currentY + 10, { align: 'center' });
   
   doc.setFontSize(32);
   doc.setFont('helvetica', 'bold');
   const savingsText = formatCurrency(tcoAnalysis.savings.total);
-  try {
-    doc.text(savingsText, pageWidth / 2, currentY + 25, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text(savingsText, pageWidth / 2, currentY + 25, { align: 'center' });
   
   currentY += 45;
   
@@ -170,9 +152,7 @@ export function generateBusinessCasePDF(calculations) {
   doc.setFontSize(12);
   doc.setFont('helvetica', 'normal');
   const summaryLines = doc.splitTextToSize(roiAnalysis.summary, pageWidth - 2 * margin);
-  try {
-    doc.text(summaryLines, margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text(summaryLines, margin, currentY);
   
   currentY += summaryLines.length * 7 + 10;
   
@@ -196,24 +176,16 @@ export function generateBusinessCasePDF(calculations) {
     const y = statsY + row * 10;
     
     doc.setFont('helvetica', 'bold');
-    try {
-      doc.text(stat[0], x, y);
-    } catch(e) { /* skip */ }
+    doc.text(stat[0], x, y);
     doc.setFont('helvetica', 'normal');
-    try {
-      doc.text(stat[1], x + 45, y);
-    } catch(e) { /* skip */ }
+    doc.text(stat[1], x + 45, y);
   });
   
   // Footer
   doc.setFontSize(8);
   doc.setTextColor(128, 128, 128);
-  try {
-    doc.text('Nerdio Value Engineering Analysis', pageWidth / 2, pageHeight - 10, { align: 'center' });
-  } catch(e) { /* skip */ }
-  try {
-    doc.text(`Generated: ${new Date().toLocaleDateString()}`, pageWidth / 2, pageHeight - 6, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text('Nerdio Value Engineering Analysis', pageWidth / 2, pageHeight - 10, { align: 'center' });
+  doc.text('Generated: ${new Date().toLocaleDateString()}', pageWidth / 2, pageHeight - 6, { align: 'center' });
   
   // ============================================
   // PAGE 2: THE CHALLENGE - CREATE URGENCY
@@ -222,15 +194,11 @@ export function generateBusinessCasePDF(calculations) {
   
   // Page header
   doc.setFillColor(...colors.danger);
-  try {
-    doc.rect(0, 0, pageWidth, 25, 'F');
-  } catch(e) { /* skip */ }
+  doc.rect(0, 0, pageWidth, 25, 'F');
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('CURRENT STATE CHALLENGES', margin, 15);
-  } catch(e) { /* skip */ }
+  doc.text('CURRENT STATE CHALLENGES', margin, 15);
   
   currentY = 35;
   
@@ -238,41 +206,29 @@ export function generateBusinessCasePDF(calculations) {
   doc.setTextColor(...colors.dark);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('Your Current Infrastructure:', margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('Your Current Infrastructure:', margin, currentY);
   
   currentY += 10;
   
   doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
-  try {
-    doc.text(`Platform: ${currentState.platform.toUpperCase()}`, margin + 5, currentY);
-  } catch(e) { /* skip */ }
-  try {
-    doc.text(`Users: ${customerProfile.totalUsers.toLocaleString()}`, margin + 5, currentY + 7);
-  } catch(e) { /* skip */ }
+  doc.text('Platform: ${currentState.platform.toUpperCase()}', margin + 5, currentY);
+  doc.text('Users: ${customerProfile.totalUsers.toLocaleString()}', margin + 5, currentY + 7);
   
   currentY += 20;
   
   // Current cost box (RED - pain)
   const costBoxHeight = 35;
   doc.setFillColor(...colors.danger);
-  try {
-    doc.roundedRect(margin, currentY, pageWidth - 2 * margin, costBoxHeight, 5, 5, 'F');
-  } catch(e) { /* skip */ }
+  doc.roundedRect(margin, currentY, pageWidth - 2 * margin, costBoxHeight, 5, 5, 'F');
   
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('ANNUAL COST', pageWidth / 2, currentY + 12, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text('ANNUAL COST', pageWidth / 2, currentY + 12, { align: 'center' });
   
   doc.setFontSize(28);
-  try {
-    doc.text(formatCurrency(currentState.costs.annual), pageWidth / 2, currentY + 27, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text(formatCurrency(currentState.costs.annual), pageWidth / 2, currentY + 27, { align: 'center' });
   
   currentY += costBoxHeight + 15;
   
@@ -280,9 +236,7 @@ export function generateBusinessCasePDF(calculations) {
   doc.setTextColor(...colors.dark);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('Key Pain Points:', margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('Key Pain Points:', margin, currentY);
   
   currentY += 10;
   
@@ -298,13 +252,9 @@ export function generateBusinessCasePDF(calculations) {
   doc.setFont('helvetica', 'normal');
   painPoints.forEach((point, i) => {
     doc.setTextColor(...colors.danger);
-    try {
-      doc.text('!', margin, currentY);
-    } catch(e) { /* skip */ }
+    doc.text('!', margin, currentY);
     doc.setTextColor(...colors.dark);
-    try {
-      doc.text(point, margin + 8, currentY);
-    } catch(e) { /* skip */ }
+    doc.text(point, margin + 8, currentY);
     currentY += 8;
   });
   
@@ -313,9 +263,7 @@ export function generateBusinessCasePDF(calculations) {
   // Cost breakdown
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('Cost Breakdown:', margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('Cost Breakdown:', margin, currentY);
   
   currentY += 8;
   
@@ -341,15 +289,11 @@ export function generateBusinessCasePDF(calculations) {
   
   // Page header
   doc.setFillColor(...colors.success);
-  try {
-    doc.rect(0, 0, pageWidth, 25, 'F');
-  } catch(e) { /* skip */ }
+  doc.rect(0, 0, pageWidth, 25, 'F');
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('THE NERDIO SOLUTION', margin, 15);
-  } catch(e) { /* skip */ }
+  doc.text('THE NERDIO SOLUTION', margin, 15);
   
   currentY = 35;
   
@@ -357,35 +301,25 @@ export function generateBusinessCasePDF(calculations) {
   doc.setTextColor(...colors.dark);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('Azure Virtual Desktop + Nerdio Manager for Enterprise', margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('Azure Virtual Desktop + Nerdio Manager for Enterprise', margin, currentY);
   
   currentY += 15;
   
   // Future cost box (GREEN - gain)
   const futureCostBoxHeight = 40;
   doc.setFillColor(...colors.success);
-  try {
-    doc.roundedRect(margin, currentY, pageWidth - 2 * margin, futureCostBoxHeight, 5, 5, 'F');
-  } catch(e) { /* skip */ }
+  doc.roundedRect(margin, currentY, pageWidth - 2 * margin, futureCostBoxHeight, 5, 5, 'F');
   
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('NEW ANNUAL COST', pageWidth / 2, currentY + 10, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text('NEW ANNUAL COST', pageWidth / 2, currentY + 10, { align: 'center' });
   
   doc.setFontSize(28);
-  try {
-    doc.text(formatCurrency(futureState.totals.annualNet), pageWidth / 2, currentY + 25, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text(formatCurrency(futureState.totals.annualNet), pageWidth / 2, currentY + 25, { align: 'center' });
   
   doc.setFontSize(16);
-  try {
-    doc.text(` ${formatPercentage(tcoAnalysis.savings.percentage)} REDUCTION`, pageWidth / 2, currentY + 35, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text('↓ ${formatPercentage(tcoAnalysis.savings.percentage)} REDUCTION', pageWidth / 2, currentY + 35, { align: 'center' });
   
   currentY += futureCostBoxHeight + 15;
   
@@ -393,9 +327,7 @@ export function generateBusinessCasePDF(calculations) {
   doc.setTextColor(...colors.dark);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('Key Benefits:', margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('Key Benefits:', margin, currentY);
   
   currentY += 10;
   
@@ -411,13 +343,9 @@ export function generateBusinessCasePDF(calculations) {
   doc.setFont('helvetica', 'normal');
   benefits.forEach((benefit, i) => {
     doc.setTextColor(...colors.success);
-    try {
-      doc.text('>', margin, currentY);
-    } catch(e) { /* skip */ }
+    doc.text('>', margin, currentY);
     doc.setTextColor(...colors.dark);
-    try {
-      doc.text(benefit, margin + 8, currentY);
-    } catch(e) { /* skip */ }
+    doc.text(benefit, margin + 8, currentY);
     currentY += 8;
   });
   
@@ -426,9 +354,7 @@ export function generateBusinessCasePDF(calculations) {
   // Cost comparison visualization
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('Cost Comparison:', margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('Cost Comparison:', margin, currentY);
   
   currentY += 10;
   
@@ -439,32 +365,20 @@ export function generateBusinessCasePDF(calculations) {
   
   // Current state bar (RED)
   doc.setFillColor(...colors.danger);
-  try {
-    doc.rect(margin + 40, currentY, currentState.costs.annual * scale, 15, 'F');
-  } catch(e) { /* skip */ }
+  doc.rect(margin + 40, currentY, currentState.costs.annual * scale, 15, 'F');
   doc.setTextColor(...colors.dark);
   doc.setFontSize(10);
-  try {
-    doc.text('Current:', margin, currentY + 10);
-  } catch(e) { /* skip */ }
-  try {
-    doc.text(formatCurrency(currentState.costs.annual), margin + 45 + currentState.costs.annual * scale, currentY + 10);
-  } catch(e) { /* skip */ }
+  doc.text('Current:', margin, currentY + 10);
+  doc.text(formatCurrency(currentState.costs.annual), margin + 45 + currentState.costs.annual * scale, currentY + 10);
   
   currentY += 20;
   
   // Future state bar (GREEN)
   doc.setFillColor(...colors.success);
-  try {
-    doc.rect(margin + 40, currentY, futureState.totals.annualNet * scale, 15, 'F');
-  } catch(e) { /* skip */ }
+  doc.rect(margin + 40, currentY, futureState.totals.annualNet * scale, 15, 'F');
   doc.setTextColor(...colors.dark);
-  try {
-    doc.text('Future:', margin, currentY + 10);
-  } catch(e) { /* skip */ }
-  try {
-    doc.text(formatCurrency(futureState.totals.annualNet), margin + 45 + futureState.totals.annualNet * scale, currentY + 10);
-  } catch(e) { /* skip */ }
+  doc.text('Future:', margin, currentY + 10);
+  doc.text(formatCurrency(futureState.totals.annualNet), margin + 45 + futureState.totals.annualNet * scale, currentY + 10);
   
   currentY += 25;
   
@@ -472,16 +386,12 @@ export function generateBusinessCasePDF(calculations) {
   doc.setFillColor(...colors.success);
   doc.setDrawColor(...colors.success);
   doc.setLineWidth(1);
-  try {
-    doc.roundedRect(margin, currentY, pageWidth - 2 * margin, 20, 3, 3, 'FD');
-  } catch(e) { /* skip */ }
+  doc.roundedRect(margin, currentY, pageWidth - 2 * margin, 20, 3, 3, 'FD');
   
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text(`ANNUAL SAVINGS: ${formatCurrency(tcoAnalysis.savings.annual)}`, pageWidth / 2, currentY + 13, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text('ANNUAL SAVINGS: ${formatCurrency(tcoAnalysis.savings.annual)}', pageWidth / 2, currentY + 13, { align: 'center' });
   
   // ============================================
   // PAGE 4: FINANCIAL IMPACT - PROVE THE VALUE
@@ -490,15 +400,11 @@ export function generateBusinessCasePDF(calculations) {
   
   // Page header
   doc.setFillColor(...colors.nerdio);
-  try {
-    doc.rect(0, 0, pageWidth, 25, 'F');
-  } catch(e) { /* skip */ }
+  doc.rect(0, 0, pageWidth, 25, 'F');
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('3-YEAR FINANCIAL IMPACT', margin, 15);
-  } catch(e) { /* skip */ }
+  doc.text('3-YEAR FINANCIAL IMPACT', margin, 15);
   
   currentY = 35;
   
@@ -506,9 +412,7 @@ export function generateBusinessCasePDF(calculations) {
   doc.setTextColor(...colors.dark);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('Total Cost of Ownership:', margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('Total Cost of Ownership:', margin, currentY);
   
   currentY += 10;
   
@@ -517,30 +421,22 @@ export function generateBusinessCasePDF(calculations) {
   
   // Current state
   doc.setTextColor(...colors.danger);
-  // doc.text('●', margin, currentY); // Removed
+  doc.text('●', margin, currentY);
   doc.setTextColor(...colors.dark);
-  try {
-    doc.text(`Current State (${tcoAnalysis.timeHorizon.years} years):`, margin + 5, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('Current State (${tcoAnalysis.timeHorizon.years} years):', margin + 5, currentY);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text(formatCurrency(tcoAnalysis.currentState.totalCost), pageWidth - margin, currentY, { align: 'right' });
-  } catch(e) { /* skip */ }
+  doc.text(formatCurrency(tcoAnalysis.currentState.totalCost), pageWidth - margin, currentY, { align: 'right' });
   
   currentY += 8;
   
   // Future state
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(...colors.success);
-  // doc.text('●', margin, currentY); // Removed
+  doc.text('●', margin, currentY);
   doc.setTextColor(...colors.dark);
-  try {
-    doc.text(`Future State (${tcoAnalysis.timeHorizon.years} years):`, margin + 5, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('Future State (${tcoAnalysis.timeHorizon.years} years):', margin + 5, currentY);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text(formatCurrency(tcoAnalysis.futureState.totalCost), pageWidth - margin, currentY, { align: 'right' });
-  } catch(e) { /* skip */ }
+  doc.text(formatCurrency(tcoAnalysis.futureState.totalCost), pageWidth - margin, currentY, { align: 'right' });
   
   currentY += 10;
   
@@ -555,12 +451,8 @@ export function generateBusinessCasePDF(calculations) {
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(...colors.success);
-  try {
-    doc.text('TOTAL SAVINGS:', margin, currentY);
-  } catch(e) { /* skip */ }
-  try {
-    doc.text(formatCurrency(tcoAnalysis.savings.total), pageWidth - margin, currentY, { align: 'right' });
-  } catch(e) { /* skip */ }
+  doc.text('TOTAL SAVINGS:', margin, currentY);
+  doc.text(formatCurrency(tcoAnalysis.savings.total), pageWidth - margin, currentY, { align: 'right' });
   
   currentY += 15;
   
@@ -568,9 +460,7 @@ export function generateBusinessCasePDF(calculations) {
   doc.setTextColor(...colors.dark);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('Annual Value Breakdown:', margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('Annual Value Breakdown:', margin, currentY);
   
   currentY += 8;
   
@@ -599,9 +489,7 @@ export function generateBusinessCasePDF(calculations) {
   // ROI Metrics boxes
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('Key ROI Metrics:', margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('Key ROI Metrics:', margin, currentY);
   
   currentY += 10;
   
@@ -625,35 +513,25 @@ export function generateBusinessCasePDF(calculations) {
   
   // Page header
   doc.setFillColor(...colors.info);
-  try {
-    doc.rect(0, 0, pageWidth, 25, 'F');
-  } catch(e) { /* skip */ }
+  doc.rect(0, 0, pageWidth, 25, 'F');
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('OPERATIONAL EFFICIENCY GAINS', margin, 15);
-  } catch(e) { /* skip */ }
+  doc.text('OPERATIONAL EFFICIENCY GAINS', margin, 15);
   
   currentY = 35;
   
   // Time savings callout
   doc.setFillColor(230, 240, 255);
-  try {
-    doc.roundedRect(margin, currentY, pageWidth - 2 * margin, 30, 5, 5, 'F');
-  } catch(e) { /* skip */ }
+  doc.roundedRect(margin, currentY, pageWidth - 2 * margin, 30, 5, 5, 'F');
   
   doc.setTextColor(...colors.info);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('Admin Time Saved:', margin + 5, currentY + 10);
-  } catch(e) { /* skip */ }
+  doc.text('Admin Time Saved:', margin + 5, currentY + 10);
   
   doc.setFontSize(24);
-  try {
-    doc.text(`${roiAnalysis.detailedBreakdown.operational.breakdown.adminHoursPerWeek}+ Hours/Week`, pageWidth / 2, currentY + 22, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text('${roiAnalysis.detailedBreakdown.operational.breakdown.adminHoursPerWeek}+ Hours/Week', pageWidth / 2, currentY + 22, { align: 'center' });
   
   currentY += 40;
   
@@ -661,9 +539,7 @@ export function generateBusinessCasePDF(calculations) {
   doc.setTextColor(...colors.dark);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('Productivity Improvements:', margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('Productivity Improvements:', margin, currentY);
   
   currentY += 8;
   
@@ -685,9 +561,7 @@ export function generateBusinessCasePDF(calculations) {
   // User experience improvements
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('User Experience Improvements:', margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('User Experience Improvements:', margin, currentY);
   
   currentY += 10;
   
@@ -702,9 +576,7 @@ export function generateBusinessCasePDF(calculations) {
   doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
   uxBenefits.forEach((benefit) => {
-    try {
-      doc.text(benefit, margin + 5, currentY);
-    } catch(e) { /* skip */ }
+    doc.text(benefit, margin + 5, currentY);
     currentY += 8;
   });
   
@@ -715,15 +587,11 @@ export function generateBusinessCasePDF(calculations) {
   
   // Page header
   doc.setFillColor(34, 197, 94); // Green
-  try {
-    doc.rect(0, 0, pageWidth, 25, 'F');
-  } catch(e) { /* skip */ }
+  doc.rect(0, 0, pageWidth, 25, 'F');
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('ENVIRONMENTAL IMPACT', margin, 15);
-  } catch(e) { /* skip */ }
+  doc.text('ENVIRONMENTAL IMPACT', margin, 15);
   
   currentY = 35;
   
@@ -733,9 +601,7 @@ export function generateBusinessCasePDF(calculations) {
   doc.setFont('helvetica', 'normal');
   const envText = 'Moving to Azure with Nerdio optimization provides significant environmental benefits through reduced energy consumption and Azure\'s commitment to sustainability.';
   const envLines = doc.splitTextToSize(envText, pageWidth - 2 * margin);
-  try {
-    doc.text(envLines, margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text(envLines, margin, currentY);
   
   currentY += envLines.length * 7 + 15;
   
@@ -745,36 +611,24 @@ export function generateBusinessCasePDF(calculations) {
   
   // CO2 Reduction
   doc.setFillColor(34, 197, 94);
-  try {
-    doc.roundedRect(margin, currentY, envBoxWidth, envBoxHeight, 5, 5, 'F');
-  } catch(e) { /* skip */ }
+  doc.roundedRect(margin, currentY, envBoxWidth, envBoxHeight, 5, 5, 'F');
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('CO2 REDUCTION', margin + envBoxWidth / 2, currentY + 12, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text('CO₂ REDUCTION', margin + envBoxWidth / 2, currentY + 12, { align: 'center' });
   doc.setFontSize(28);
-  try {
-    doc.text(`${roiAnalysis.detailedBreakdown.environmental.co2ReductionTons.toFixed(1)} tons`, margin + envBoxWidth / 2, currentY + 27, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text('${roiAnalysis.detailedBreakdown.environmental.co2ReductionTons.toFixed(1)} tons', margin + envBoxWidth / 2, currentY + 27, { align: 'center' });
   
   // Trees Equivalent
   const treesEquiv = Math.round(roiAnalysis.detailedBreakdown.environmental.co2ReductionTons * 16);
   doc.setFillColor(22, 163, 74);
-  try {
-    doc.roundedRect(margin + envBoxWidth + 10, currentY, envBoxWidth, envBoxHeight, 5, 5, 'F');
-  } catch(e) { /* skip */ }
+  doc.roundedRect(margin + envBoxWidth + 10, currentY, envBoxWidth, envBoxHeight, 5, 5, 'F');
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('TREES PLANTED', margin + envBoxWidth + 10 + envBoxWidth / 2, currentY + 12, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text('TREES PLANTED', margin + envBoxWidth + 10 + envBoxWidth / 2, currentY + 12, { align: 'center' });
   doc.setFontSize(28);
-  try {
-    doc.text(`${treesEquiv}`, margin + envBoxWidth + 10 + envBoxWidth / 2, currentY + 27, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text('${treesEquiv}', margin + envBoxWidth + 10 + envBoxWidth / 2, currentY + 27, { align: 'center' });
   
   currentY += envBoxHeight + 15;
   
@@ -782,9 +636,7 @@ export function generateBusinessCasePDF(calculations) {
   doc.setTextColor(...colors.dark);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('Azure Sustainability Commitments:', margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('Azure Sustainability Commitments:', margin, currentY);
   
   currentY += 10;
   
@@ -799,9 +651,7 @@ export function generateBusinessCasePDF(calculations) {
   doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
   azureSustainability.forEach((item) => {
-    try {
-      doc.text(item, margin + 5, currentY);
-    } catch(e) { /* skip */ }
+    doc.text(item, margin + 5, currentY);
     currentY += 8;
   });
   
@@ -809,25 +659,17 @@ export function generateBusinessCasePDF(calculations) {
   
   // Carbon credit value
   doc.setFillColor(220, 252, 231);
-  try {
-    doc.roundedRect(margin, currentY, pageWidth - 2 * margin, 20, 3, 3, 'F');
-  } catch(e) { /* skip */ }
+  doc.roundedRect(margin, currentY, pageWidth - 2 * margin, 20, 3, 3, 'F');
   
   doc.setTextColor(...colors.dark);
   doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('Estimated Carbon Credit Value:', margin + 5, currentY + 8);
-  } catch(e) { /* skip */ }
-  try {
-    doc.text(formatCurrency(roiAnalysis.detailedBreakdown.environmental.carbonCreditValue) + '/year', pageWidth - margin - 5, currentY + 8, { align: 'right' });
-  } catch(e) { /* skip */ }
+  doc.text('Estimated Carbon Credit Value:', margin + 5, currentY + 8);
+  doc.text(formatCurrency(roiAnalysis.detailedBreakdown.environmental.carbonCreditValue) + '/year', pageWidth - margin - 5, currentY + 8, { align: 'right' });
   
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  try {
-    doc.text('Additional ESG value for sustainability reporting', margin + 5, currentY + 15);
-  } catch(e) { /* skip */ }
+  doc.text('Additional ESG value for sustainability reporting', margin + 5, currentY + 15);
   
   // ============================================
   // PAGE 7: IMPLEMENTATION PLAN
@@ -836,42 +678,28 @@ export function generateBusinessCasePDF(calculations) {
   
   // Page header
   doc.setFillColor(...colors.nerdio);
-  try {
-    doc.rect(0, 0, pageWidth, 25, 'F');
-  } catch(e) { /* skip */ }
+  doc.rect(0, 0, pageWidth, 25, 'F');
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('IMPLEMENTATION ROADMAP', margin, 15);
-  } catch(e) { /* skip */ }
+  doc.text('IMPLEMENTATION ROADMAP', margin, 15);
   
   currentY = 35;
-  
-  
-  // Safety checks for implementation cost
-  const implWeeks = implementationCost?.durationWeeks || 16;
-  const implTotal = implementationCost?.totalCost || 220000;
-  const implPM = implementationCost?.projectManagementHours || 200;
-  const implArch = implementationCost?.architectHours || 240;
-  const implEng = implementationCost?.engineerHours || 600;
   
   // Timeline overview
   doc.setTextColor(...colors.dark);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text(`Implementation Timeline: ${implWeeks} Weeks`, margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('Implementation Timeline: ${implementationCost.durationWeeks} Weeks', margin, currentY);
   
   currentY += 15;
   
   // Phase breakdown
   const phases = [
-    { name: 'Planning & Design', weeks: Math.round(implWeeks * 0.25), color: colors.info },
-    { name: 'Build & Configure', weeks: Math.round(implWeeks * 0.35), color: colors.nerdio },
-    { name: 'Testing & Migration', weeks: Math.round(implWeeks * 0.25), color: colors.warning },
-    { name: 'Go-Live & Optimize', weeks: Math.round(implWeeks * 0.15), color: colors.success }
+    { name: 'Planning & Design', weeks: Math.round(implementationCost.durationWeeks * 0.25), color: colors.info },
+    { name: 'Build & Configure', weeks: Math.round(implementationCost.durationWeeks * 0.35), color: colors.nerdio },
+    { name: 'Testing & Migration', weeks: Math.round(implementationCost.durationWeeks * 0.25), color: colors.warning },
+    { name: 'Go-Live & Optimize', weeks: Math.round(implementationCost.durationWeeks * 0.15), color: colors.success }
   ];
   
   const timelineWidth = pageWidth - 2 * margin;
@@ -879,25 +707,19 @@ export function generateBusinessCasePDF(calculations) {
   let phaseX = margin;
   
   phases.forEach((phase) => {
-    const phaseWidth = (phase.weeks / implWeeks) * timelineWidth;
+    const phaseWidth = (phase.weeks / implementationCost.durationWeeks) * timelineWidth;
     
     doc.setFillColor(...phase.color);
-    try {
-      doc.rect(phaseX, currentY, phaseWidth - 2, phaseHeight, 'F');
-    } catch(e) { /* skip */ }
+    doc.rect(phaseX, currentY, phaseWidth - 2, phaseHeight, 'F');
     
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
     const phaseName = doc.splitTextToSize(phase.name, phaseWidth - 4);
-    try {
-      doc.text(phaseName, phaseX + phaseWidth / 2, currentY + 10, { align: 'center' });
-    } catch(e) { /* skip */ }
+    doc.text(phaseName, phaseX + phaseWidth / 2, currentY + 10, { align: 'center' });
     
     doc.setFontSize(9);
-    try {
-      doc.text(`${phase.weeks}w`, phaseX + phaseWidth / 2, currentY + 18, { align: 'center' });
-    } catch(e) { /* skip */ }
+    doc.text('${phase.weeks}w', phaseX + phaseWidth / 2, currentY + 18, { align: 'center' });
     
     phaseX += phaseWidth;
   });
@@ -908,30 +730,22 @@ export function generateBusinessCasePDF(calculations) {
   doc.setTextColor(...colors.dark);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('Investment Required:', margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('Investment Required:', margin, currentY);
   
   currentY += 10;
   
   // Investment box
   doc.setFillColor(243, 244, 246);
-  try {
-    doc.roundedRect(margin, currentY, pageWidth - 2 * margin, 40, 5, 5, 'F');
-  } catch(e) { /* skip */ }
+  doc.roundedRect(margin, currentY, pageWidth - 2 * margin, 40, 5, 5, 'F');
   
   doc.setTextColor(...colors.dark);
   doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('One-Time Implementation Cost:', margin + 5, currentY + 12);
-  } catch(e) { /* skip */ }
+  doc.text('One-Time Implementation Cost:', margin + 5, currentY + 12);
   
   doc.setFontSize(24);
   doc.setTextColor(...colors.nerdio);
-  try {
-    doc.text(formatCurrency(implTotal), pageWidth / 2, currentY + 28, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text(formatCurrency(implementationCost.totalCost), pageWidth / 2, currentY + 28, { align: 'center' });
   
   currentY += 50;
   
@@ -940,10 +754,10 @@ export function generateBusinessCasePDF(calculations) {
     startY: currentY,
     head: [['Resource', 'Hours', 'Cost']],
     body: [
-      ['Project Management', implPM, formatCurrency(implPM * 150)],
-      ['Solution Architect', implArch, formatCurrency(implArch * 200)],
-      ['Engineering', implEng, formatCurrency(implEng * 150)],
-      ['TOTAL', implPM + implArch + implEng, formatCurrency(implTotal)]
+      ['Project Management', implementationCost.projectManagementHours, formatCurrency(implementationCost.projectManagementHours * 150)],
+      ['Solution Architect', implementationCost.architectHours, formatCurrency(implementationCost.architectHours * 200)],
+      ['Engineering', implementationCost.engineerHours, formatCurrency(implementationCost.engineerHours * 150)],
+      ['TOTAL', implementationCost.projectManagementHours + implementationCost.architectHours + implementationCost.engineerHours, formatCurrency(implementationCost.totalCost)]
     ],
     headStyles: { fillColor: colors.nerdio, textColor: [255, 255, 255] },
     footStyles: { fillColor: colors.light, fontStyle: 'bold' },
@@ -956,9 +770,7 @@ export function generateBusinessCasePDF(calculations) {
   doc.setTextColor(...colors.dark);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('Success Metrics:', margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('Success Metrics:', margin, currentY);
   
   currentY += 10;
   
@@ -974,13 +786,9 @@ export function generateBusinessCasePDF(calculations) {
   doc.setFont('helvetica', 'normal');
   successMetrics.forEach((metric) => {
     doc.setTextColor(...colors.success);
-    try {
-      doc.text(metric.substring(0, 1), margin, currentY);
-    } catch(e) { /* skip */ }
+    doc.text(metric.substring(0, 1), margin, currentY);
     doc.setTextColor(...colors.dark);
-    try {
-      doc.text(metric.substring(2), margin + 5, currentY);
-    } catch(e) { /* skip */ }
+    doc.text(metric.substring(2), margin + 5, currentY);
     currentY += 7;
   });
   
@@ -991,30 +799,22 @@ export function generateBusinessCasePDF(calculations) {
   
   // Page header
   doc.setFillColor(...colors.success);
-  try {
-    doc.rect(0, 0, pageWidth, 25, 'F');
-  } catch(e) { /* skip */ }
+  doc.rect(0, 0, pageWidth, 25, 'F');
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(20);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('RECOMMENDED NEXT STEPS', margin, 15);
-  } catch(e) { /* skip */ }
+  doc.text('RECOMMENDED NEXT STEPS', margin, 15);
   
   currentY = 35;
   
   // Phase 1: PoV
   doc.setFillColor(243, 244, 246);
-  try {
-    doc.roundedRect(margin, currentY, pageWidth - 2 * margin, 45, 5, 5, 'F');
-  } catch(e) { /* skip */ }
+  doc.roundedRect(margin, currentY, pageWidth - 2 * margin, 45, 5, 5, 'F');
   
   doc.setTextColor(...colors.success);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('> PHASE 1: 30-Day Proof of Value', margin + 5, currentY + 10);
-  } catch(e) { /* skip */ }
+  doc.text('> PHASE 1: 30-Day Proof of Value', margin + 5, currentY + 10);
   
   doc.setTextColor(...colors.dark);
   doc.setFontSize(11);
@@ -1028,9 +828,7 @@ export function generateBusinessCasePDF(calculations) {
   
   let povY = currentY + 18;
   povSteps.forEach((step) => {
-    try {
-      doc.text(step, margin + 10, povY);
-    } catch(e) { /* skip */ }
+    doc.text(step, margin + 10, povY);
     povY += 6;
   });
   
@@ -1038,16 +836,12 @@ export function generateBusinessCasePDF(calculations) {
   
   // Phase 2: Full Deployment
   doc.setFillColor(243, 244, 246);
-  try {
-    doc.roundedRect(margin, currentY, pageWidth - 2 * margin, 35, 5, 5, 'F');
-  } catch(e) { /* skip */ }
+  doc.roundedRect(margin, currentY, pageWidth - 2 * margin, 35, 5, 5, 'F');
   
   doc.setTextColor(...colors.success);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('> PHASE 2: Full Deployment', margin + 5, currentY + 10);
-  } catch(e) { /* skip */ }
+  doc.text('> PHASE 2: Full Deployment', margin + 5, currentY + 10);
   
   doc.setTextColor(...colors.dark);
   doc.setFontSize(11);
@@ -1060,26 +854,20 @@ export function generateBusinessCasePDF(calculations) {
   
   let fullY = currentY + 18;
   fullSteps.forEach((step) => {
-    try {
-      doc.text(step, margin + 10, fullY);
-    } catch(e) { /* skip */ }
+    doc.text(step, margin + 10, fullY);
     fullY += 6;
   });
   
-  currentY += 55;  // Increased spacing to prevent overlap
+  currentY += 45;
   
   // Decision summary box (THE CLOSER)
   doc.setFillColor(...colors.nerdio);
-  try {
-    doc.roundedRect(margin, currentY, pageWidth - 2 * margin, 60, 5, 5, 'F');
-  } catch(e) { /* skip */ }
+  doc.roundedRect(margin, currentY, pageWidth - 2 * margin, 60, 5, 5, 'F');
   
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(18);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('DECISION SUMMARY', pageWidth / 2, currentY + 12, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text('DECISION SUMMARY', pageWidth / 2, currentY + 12, { align: 'center' });
   
   // Add decorative line
   doc.setDrawColor(255, 255, 255);
@@ -1090,62 +878,41 @@ export function generateBusinessCasePDF(calculations) {
   doc.setFont('helvetica', 'normal');
   
   const decisionY = currentY + 24;
-  try {
-    doc.text('Invest: ' + formatCurrency(implTotal) + ' one-time', pageWidth / 2, decisionY, { align: 'center' });
-  } catch(e) { /* skip */ }
-  try {
-    doc.text('Save: ' + formatCurrency(tcoAnalysis.savings.annual) + '/year', pageWidth / 2, decisionY + 8, { align: 'center' });
-  } catch(e) { /* skip */ }
-  try {
-    doc.text('Payback: ' + roiAnalysis.investment.paybackPeriod.months.toFixed(1) + ' months', pageWidth / 2, decisionY + 16, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text('Invest: ' + formatCurrency(implementationCost.totalCost) + ' one-time', pageWidth / 2, decisionY, { align: 'center' });
+  doc.text('Save: ' + formatCurrency(tcoAnalysis.savings.annual) + '/year', pageWidth / 2, decisionY + 8, { align: 'center' });
+  doc.text('Payback: ' + roiAnalysis.investment.paybackPeriod.months.toFixed(1) + ' months', pageWidth / 2, decisionY + 16, { align: 'center' });
   
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('>> This is a no-brainer investment <<', pageWidth / 2, decisionY + 28, { align: 'center' });
-  } catch(e) { /* skip */ }
-  currentY += 65;  // Move past decision box
+  doc.text('>> This is a no-brainer investment <<', pageWidth / 2, decisionY + 28, { align: 'center' });
   
   // Contact info
   doc.setTextColor(...colors.dark);
   doc.setFontSize(12);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('Ready to get started?', margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('Ready to get started?', margin, currentY);
   
   currentY += 8;
   
   doc.setFontSize(11);
   doc.setFont('helvetica', 'normal');
-  try {
-    doc.text('Contact your Nerdio representative to schedule your', margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('Contact your Nerdio representative to schedule your', margin, currentY);
   currentY += 6;
-  try {
-    doc.text('30-day Proof of Value and begin your transformation.', margin, currentY);
-  } catch(e) { /* skip */ }
+  doc.text('30-day Proof of Value and begin your transformation.', margin, currentY);
   
   // Footer with branding
   const footerY = pageHeight - 20;
   doc.setFillColor(...colors.nerdio);
-  try {
-    doc.rect(0, footerY, pageWidth, 20, 'F');
-  } catch(e) { /* skip */ }
+  doc.rect(0, footerY, pageWidth, 20, 'F');
   
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
-  try {
-    doc.text('Powered by Nerdio', pageWidth / 2, footerY + 10, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text('Powered by Nerdio', pageWidth / 2, footerY + 10, { align: 'center' });
   
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  try {
-    doc.text('www.getnerdio.com', pageWidth / 2, footerY + 16, { align: 'center' });
-  } catch(e) { /* skip */ }
+  doc.text('www.getnerdio.com', pageWidth / 2, footerY + 16, { align: 'center' });
   
   return doc;
 }

@@ -13,15 +13,15 @@ import {
 
 const BusinessCaseContext = createContext();
 
-export const useBusinessCase = () => {
+export function useBusinessCase() {
   const context = useContext(BusinessCaseContext);
   if (!context) {
     throw new Error('useBusinessCase must be used within BusinessCaseProvider');
   }
   return context;
-};
+}
 
-export const BusinessCaseProvider = ({ children }) => {
+export function BusinessCaseProvider({ children }) {
   const [currentStep, setCurrentStep] = useState(1);
   const [customerProfile, setCustomerProfile] = useState(null);
   const [currentStateConfig, setCurrentStateConfig] = useState(null);
@@ -29,8 +29,22 @@ export const BusinessCaseProvider = ({ children }) => {
   const [calculations, setCalculations] = useState(null);
   const [savedScenarios, setSavedScenarios] = useState([]);
 
-  // Calculate timeline at component level (hook must be called here)
-  const timelineSummary = useTimelineCalculator(customerProfile || {});
+  useEffect(() => {
+    const saved = localStorage.getItem('businessCaseScenarios');
+    if (saved) {
+      try {
+        setSavedScenarios(JSON.parse(saved));
+      } catch (error) {
+        console.error('Error loading saved scenarios:', error);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (savedScenarios.length > 0) {
+      localStorage.setItem('businessCaseScenarios', JSON.stringify(savedScenarios));
+    }
+  }, [savedScenarios]);
 
   const setProfile = (profile) => {
     setCustomerProfile(profile);
@@ -44,6 +58,7 @@ export const BusinessCaseProvider = ({ children }) => {
 
   const setFutureState = (config) => {
     setFutureStateConfig(config);
+    
     if (customerProfile && currentStateConfig) {
       calculateBusinessCase(customerProfile, currentStateConfig, config);
     }
@@ -51,34 +66,48 @@ export const BusinessCaseProvider = ({ children }) => {
 
   const calculateBusinessCase = (profile, currentConfig, futureConfig) => {
     try {
-      console.log("Timeline Summary:", timelineSummary);
-      
-      // Use the new VE engine orchestrator
-      const results = calculateBusinessCaseFull(
-        profile,
-        {
-          platform: currentConfig.platform || profile.currentPlatform,
-          userCount: profile.totalUsers,
-          serverCount: currentConfig.serverCount || profile.currentServerCount,
-          customCosts: currentConfig.customCosts
-        },
-        {
-          userCount: profile.totalUsers,
-          userProfile: futureConfig.userProfile || profile.userProfile,
-          storageType: futureConfig.storageType || 'premiumSSD',
-          storagePerUserGB: futureConfig.storagePerUserGB || 100,
-          includeNerdio: futureConfig.includeNerdio !== false
-        },
-        {
-          timeHorizonYears: futureConfig.timeHorizonYears || 3,
-          timelineSummary
-        }
-      );
-      
-      console.log("Results with timeline:", JSON.stringify(results, null, 2));
-      
+      const currentState = calculateCurrentStateCost({
+        platform: currentConfig.platform || profile.currentPlatform,
+        userCount: profile.totalUsers,
+        serverCount: currentConfig.serverCount || profile.currentServerCount,
+        customCosts: currentConfig.customCosts
+      });
+
+      const futureState = calculateAVDInfrastructureCost({
+        userCount: profile.totalUsers,
+        userProfile: futureConfig.userProfile || profile.userProfile,
+        storageType: futureConfig.storageType || 'premiumSSD',
+        storagePerUserGB: futureConfig.storagePerUserGB || 100,
+        includeNerdio: futureConfig.includeNerdio !== false
+      });
+
+      const timeHorizon = futureConfig.timeHorizonYears || 3;
+      const tcoAnalysis = calculateTCO(currentState, futureState, timeHorizon);
+
+      const implCost = getImplementationCost(profile.totalUsers);
+      const infrastructureSavings = tcoAnalysis.savings.annual;
+
+      const roiAnalysis = calculateComprehensiveROI({
+        userCount: profile.totalUsers,
+        infrastructureSavings,
+        implementationCost: implCost.totalCost,
+        timeHorizonYears: timeHorizon
+      });
+
+      const results = {
+        customerProfile: profile,
+        currentState,
+        futureState,
+        tcoAnalysis,
+        roiAnalysis,
+        implementationCost: implCost,
+        calculatedAt: new Date().toISOString()
+      };
+      console.log("Results object created:", JSON.stringify(results, null, 2));
+
       setCalculations(results);
       setCurrentStep(4);
+
       return results;
     } catch (error) {
       console.error('Error calculating business case:', error);
@@ -90,6 +119,7 @@ export const BusinessCaseProvider = ({ children }) => {
     if (!calculations) {
       throw new Error('No calculations to save');
     }
+
     const scenario = {
       id: Date.now().toString(),
       name: name || `Scenario ${savedScenarios.length + 1}`,
@@ -99,6 +129,7 @@ export const BusinessCaseProvider = ({ children }) => {
       calculations,
       savedAt: new Date().toISOString()
     };
+
     setSavedScenarios(prev => [...prev, scenario]);
     return scenario;
   };
@@ -108,11 +139,13 @@ export const BusinessCaseProvider = ({ children }) => {
     if (!scenario) {
       throw new Error('Scenario not found');
     }
+
     setCustomerProfile(scenario.customerProfile);
     setCurrentStateConfig(scenario.currentStateConfig);
     setFutureStateConfig(scenario.futureStateConfig);
     setCalculations(scenario.calculations);
     setCurrentStep(4);
+
     return scenario;
   };
 
@@ -120,12 +153,18 @@ export const BusinessCaseProvider = ({ children }) => {
     setSavedScenarios(prev => prev.filter(s => s.id !== scenarioId));
   };
 
-  const resetWizard = () => {
+  const reset = () => {
     setCurrentStep(1);
     setCustomerProfile(null);
     setCurrentStateConfig(null);
     setFutureStateConfig(null);
     setCalculations(null);
+  };
+
+  const goToStep = (step) => {
+    if (step >= 1 && step <= 4) {
+      setCurrentStep(step);
+    }
   };
 
   const value = {
@@ -135,7 +174,6 @@ export const BusinessCaseProvider = ({ children }) => {
     futureStateConfig,
     calculations,
     savedScenarios,
-    timelineSummary,  // Export timeline for components to use
     setProfile,
     setCurrentState,
     setFutureState,
@@ -143,8 +181,20 @@ export const BusinessCaseProvider = ({ children }) => {
     saveScenario,
     loadScenario,
     deleteScenario,
-    resetWizard,
-    setCurrentStep
+    reset,
+    goToStep,
+    hasProfile: !!customerProfile,
+    hasCurrentState: !!currentStateConfig,
+    hasFutureState: !!futureStateConfig,
+    hasCalculations: !!calculations,
+    canProceed: (step) => {
+      switch (step) {
+        case 2: return !!customerProfile;
+        case 3: return !!customerProfile && !!currentStateConfig;
+        case 4: return !!calculations;
+        default: return true;
+      }
+    }
   };
 
   return (
@@ -152,4 +202,6 @@ export const BusinessCaseProvider = ({ children }) => {
       {children}
     </BusinessCaseContext.Provider>
   );
-};
+}
+
+export default BusinessCaseContext;

@@ -4,6 +4,61 @@ import { formatCurrency, formatPercentage } from '../business-case/cost-calculat
 /**
  * Generate comprehensive Excel workbook from business case calculations
  */
+
+function createTimelineSheet(calculations) {
+  const { timeline } = calculations;
+  
+  if (!timeline || !timeline.phases) {
+    return XLSX.utils.aoa_to_sheet([["Timeline data not available"]]);
+  }
+
+  const data = [
+    ['IMPLEMENTATION TIMELINE'],
+    [''],
+    ['TIMELINE SUMMARY'],
+    ['Sequential Duration:', timeline.totals.sequentialWeeks + ' weeks'],
+    ['Parallelized Duration:', timeline.totals.parallelizedWeeks + ' weeks'],
+    ['Time Saved:', timeline.totals.creditWeeks + ' weeks'],
+    ['Go-Live Buffer:', Math.abs(timeline.validity) + ' weeks ' + (timeline.validity >= 0 ? 'buffer' : 'short')],
+    [''],
+    ['IMPLEMENTATION PHASES'],
+    ['Phase', 'Description', 'Duration (Weeks)', 'Percentage'],
+    ...timeline.phases.items.map(phase => [
+      phase.key,
+      phase.label,
+      phase.weeks,
+      ((phase.weeks / timeline.phases.sequentialTotal) * 100).toFixed(1) + '%'
+    ]),
+    [''],
+    ['TOTAL', '', timeline.phases.sequentialTotal, '100%'],
+    [''],
+    ['COMPLEXITY ASSESSMENT'],
+    ['Driver', 'Complexity'],
+    ['Timeline Pressure (D5)', timeline.audit.bands.D5.toUpperCase()],
+    ['User Scale (D6)', timeline.audit.bands.D6.toUpperCase()],
+    ['Use Cases (D7)', timeline.audit.bands.D7.toUpperCase()],
+    ['Cloud Platform (D14)', timeline.audit.bands.D14.toUpperCase()],
+    ['Landing Zone (D15)', timeline.audit.bands.D15.toUpperCase()],
+    ['OS Version (D16)', timeline.audit.bands.D16.toUpperCase()],
+    ['Change Control (D19)', timeline.audit.bands.D19.toUpperCase()],
+    ['Security Review (D22)', timeline.audit.bands.D22.toUpperCase()],
+    ['App Count (D25)', timeline.audit.bands.D25.toUpperCase()],
+    ['App Deployment (D26)', timeline.audit.bands.D26.toUpperCase()],
+    ['Backend Sensitivity (D27)', timeline.audit.bands.D27.toUpperCase()],
+    ['Peripherals (D28)', timeline.audit.bands.D28.toUpperCase()],
+    ['LOB Testing (D29)', timeline.audit.bands.D29.toUpperCase()],
+    ['Modernization Age (D30)', timeline.audit.bands.D30.toUpperCase()],
+    [''],
+    ['Parallelization Factor:', (timeline.audit.parallelizationPct * 100).toFixed(0) + '%']
+  ];
+
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  ws['!cols'] = [{ wch: 30 }, { wch: 40 }, { wch: 20 }, { wch: 15 }];
+  
+  return ws;
+}
+
+
 export function generateBusinessCaseExcel(calculations) {
   const { customerProfile, currentState, futureState, tcoAnalysis, roiAnalysis, implementationCost } = calculations;
   
@@ -29,6 +84,10 @@ export function generateBusinessCaseExcel(calculations) {
   // Sheet 5: ROI Calculations
   const roiSheet = createROISheet(calculations);
   XLSX.utils.book_append_sheet(workbook, roiSheet, 'ROI Metrics');
+  
+  // Add Timeline sheet
+  const timelineSheet = createTimelineSheet(calculations);
+  XLSX.utils.book_append_sheet(workbook, timelineSheet, 'Implementation Timeline');
   
   // Sheet 6: Value Breakdown
   const valueSheet = createValueBreakdownSheet(calculations);
@@ -114,11 +173,11 @@ function createCurrentStateSheet(calculations) {
  */
 function createFutureStateSheet(calculations) {
   const { futureState, customerProfile } = calculations;
-
-  if (!futureState || !futureState.costs) {
+  
+  if (!futureState || !futureState.infrastructure) {
     return XLSX.utils.aoa_to_sheet([["Future State data not available"]]);
   }
-  
+
   const data = [
     ['FUTURE STATE COST ANALYSIS'],
     [''],
@@ -127,22 +186,51 @@ function createFutureStateSheet(calculations) {
     [''],
     ['MONTHLY COSTS'],
     ['Category', 'Monthly Cost', 'Annual Cost', 'Per User/Month'],
-    ['Azure Compute', futureState.costs.compute.monthly, futureState.costs.compute.monthly * 12, futureState.costs.compute.monthly / customerProfile.totalUsers],
-    ['Azure Storage', futureState.costs.storage.monthly, futureState.costs.storage.monthly * 12, futureState.costs.storage.monthly / customerProfile.totalUsers],
-    ['Azure Networking', futureState.costs.networking.monthly, futureState.costs.networking.monthly * 12, futureState.costs.networking.monthly / customerProfile.totalUsers],
-    ['Microsoft Licenses', futureState.costs.licenses.monthly, futureState.costs.licenses.monthly * 12, futureState.costs.licenses.monthly / customerProfile.totalUsers],
-    ['Nerdio Manager', futureState.costs.nerdio.monthly, futureState.costs.nerdio.monthly * 12, futureState.costs.nerdio.monthly / customerProfile.totalUsers],
+    ['Azure VMs (' + futureState.infrastructure.vms.sku + ')', 
+      futureState.infrastructure.vms.monthlyCost, 
+      futureState.infrastructure.vms.annualCost, 
+      futureState.infrastructure.vms.monthlyCost / customerProfile.totalUsers
+    ],
+    ['Azure Storage (' + futureState.infrastructure.storage.type + ')', 
+      futureState.infrastructure.storage.monthlyCost, 
+      futureState.infrastructure.storage.annualCost, 
+      futureState.infrastructure.storage.monthlyCost / customerProfile.totalUsers
+    ],
+    ['Nerdio Manager', 
+      futureState.software.nerdioManager.monthlyCost, 
+      futureState.software.nerdioManager.annualCost, 
+      futureState.software.nerdioManager.pricePerUser
+    ],
     [''],
-    ['SUBTOTAL', futureState.totals.monthlyGross, futureState.totals.annualGross, futureState.totals.monthlyGross / customerProfile.totalUsers],
+    ['SUBTOTAL', 
+      futureState.totals.monthlyGross, 
+      futureState.totals.annualGross, 
+      futureState.totals.perUserMonthly
+    ],
     [''],
     ['NERDIO OPTIMIZATIONS'],
-    ['Auto-Scaling', -futureState.costs.autoScalingSavings.monthly, -futureState.costs.autoScalingSavings.monthly * 12, -futureState.costs.autoScalingSavings.monthly / customerProfile.totalUsers],
+    ['Auto-Scaling (' + futureState.infrastructure.autoScaling.savingsPercent + '% savings)', 
+      -futureState.infrastructure.autoScaling.monthlySavings, 
+      -futureState.infrastructure.autoScaling.annualSavings, 
+      -futureState.infrastructure.autoScaling.monthlySavings / customerProfile.totalUsers
+    ],
     [''],
-    ['TOTAL (Net)', futureState.totals.monthlyNet, futureState.totals.annualNet, futureState.totals.monthlyNet / customerProfile.totalUsers]
+    ['TOTAL (Net)', 
+      futureState.totals.monthlyNet, 
+      futureState.totals.annualNet, 
+      futureState.totals.perUserMonthly
+    ],
+    [''],
+    ['INFRASTRUCTURE DETAILS'],
+    ['VM Count:', futureState.infrastructure.vms.count],
+    ['VM SKU:', futureState.infrastructure.vms.sku],
+    ['Storage Total:', futureState.infrastructure.storage.totalGB + ' GB'],
+    ['Storage Type:', futureState.infrastructure.storage.type]
   ];
-  
+
   const ws = XLSX.utils.aoa_to_sheet(data);
-  ws['!cols'] = [{ wch: 30 }, { wch: 20 }, { wch: 20 }, { wch: 20 }];
+  ws['!cols'] = [{ wch: 40 }, { wch: 20 }, { wch: 20 }, { wch: 20 }];
+  
   return ws;
 }
 
