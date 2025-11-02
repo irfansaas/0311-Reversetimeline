@@ -16,6 +16,8 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
     totalUsers: initialData?.totalUsers || 1000,
     userProfile: initialData?.userProfile || 'medium',
     locations: initialData?.locations || [''],
+    useCaseCount: initialData?.useCaseCount || 3,
+    appCount: initialData?.appCount || 20,
     
     // Current Environment
     currentPlatform: initialData?.currentPlatform || 'citrix',
@@ -23,6 +25,7 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
     onPremiseDataCenter: initialData?.onPremiseDataCenter || false,
     
     // Timeline
+    plannedStartDate: initialData?.plannedStartDate || '',
     targetGoLiveDate: initialData?.targetGoLiveDate || '',
     compellingEvent: initialData?.compellingEvent || '',
     
@@ -255,6 +258,36 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
               ))}
             </select>
           </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Number of Use Cases
+            </label>
+            <input
+              type="number"
+              value={formData.useCaseCount}
+              onChange={(e) => handleInputChange('useCaseCount', parseInt(e.target.value))}
+              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
+              min="1"
+              placeholder="3"
+            />
+            <p className="text-xs text-gray-500 mt-1">Typical use cases: General Office, Finance, Engineering, etc.</p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Number of Applications
+            </label>
+            <input
+              type="number"
+              value={formData.appCount}
+              onChange={(e) => handleInputChange('appCount', parseInt(e.target.value))}
+              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
+              min="1"
+              placeholder="20"
+            />
+            <p className="text-xs text-gray-500 mt-1">Number of applications to be deployed in AVD</p>
+          </div>
         </div>
       </div>
 
@@ -366,6 +399,19 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Planned Start Date
+            </label>
+            <input
+              type="date"
+              value={formData.plannedStartDate}
+              onChange={(e) => handleInputChange('plannedStartDate', e.target.value)}
+              className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
+            />
+            <p className="text-xs text-gray-500 mt-1">When do you plan to start implementation?</p>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">   
               Target Go-Live Date
             </label>
             <input
@@ -377,7 +423,7 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">   
               Compelling Event
             </label>
             <input
@@ -385,7 +431,7 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
               value={formData.compellingEvent}
               onChange={(e) => handleInputChange('compellingEvent', e.target.value)}
               className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-purple-500 focus:outline-none"
-              placeholder="e.g., Contract renewal, datacenter lease expiration"
+              placeholder="e.g., Contract renewal, datacenter lease expiration"  
             />
           </div>
         </div>
