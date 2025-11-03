@@ -14,8 +14,11 @@ import {
 } from 'lucide-react';
 import { formatCurrency, formatPercentage } from '../../utils/business-case/cost-calculator';
 import { generateBusinessCasePDF } from '../../utils/export/pdf-generator';
+import OnePagerPreview from '../ExecutiveOnePager/OnePagerPreview';
+import OnePagerExport from '../ExecutiveOnePager/OnePagerExport';
 
-export default function ResultsDashboard({ calculations, onSave, onStartNew, onBack }) {
+export default function ResultsDashboard({ calculations, onSave, onStartNew, onBack, ntentData }) {
+  const [showOnePager, setShowOnePager] = useState(false);
   const [scenarioName, setScenarioName] = useState('');
   const [showSaveDialog, setShowSaveDialog] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
@@ -118,6 +121,13 @@ export default function ResultsDashboard({ calculations, onSave, onStartNew, onB
               <FileSpreadsheet size={20} />
               Export Excel
             </button>
+			<button
+              onClick={() => setShowOnePager(true)}
+              className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2"
+            > 
+  <Award size={20} />
+  Executive One-Pager
+           </button>
           </div>
         </div>
 
@@ -594,6 +604,33 @@ export default function ResultsDashboard({ calculations, onSave, onStartNew, onB
           Create New Analysis
         </button>
       </div>
+	  {showOnePager && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+    <div className="bg-white rounded-xl shadow-2xl max-w-5xl w-full mx-4 max-h-[90vh] overflow-hidden flex flex-col">
+      <div className="flex items-center justify-between p-4 border-b">
+        <h3 className="text-xl font-bold">Executive One-Pager Preview</h3>
+        <button 
+          onClick={() => setShowOnePager(false)} 
+          className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+        >
+          ×
+        </button>
+      </div>
+      <div className="flex-1 overflow-y-auto one-pager-preview">
+        <OnePagerPreview calculations={calculations} ntentData={ntentData} />
+      </div>
+      <div className="p-4 border-t flex justify-end gap-2">
+        <OnePagerExport calculations={calculations} ntentData={ntentData} />
+        <button 
+          onClick={() => setShowOnePager(false)} 
+          className="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }

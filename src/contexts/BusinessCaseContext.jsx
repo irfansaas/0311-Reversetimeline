@@ -11,7 +11,7 @@ import {
   getImplementationCost
 } from '../utils/business-case/roi-calculator';
 
-const BusinessCaseContext = createContext();
+export const BusinessCaseContext = createContext();
 
 export const useBusinessCase = () => {
   const context = useContext(BusinessCaseContext);
@@ -28,6 +28,7 @@ export const BusinessCaseProvider = ({ children }) => {
   const [futureStateConfig, setFutureStateConfig] = useState(null);
   const [calculations, setCalculations] = useState(null);
   const [savedScenarios, setSavedScenarios] = useState([]);
+  const [ntentData, setNTENTData] = useState(null);
 
   // Calculate timeline at component level (hook must be called here)
   const timelineSummary = useTimelineCalculator(customerProfile || {});
@@ -135,6 +136,8 @@ export const BusinessCaseProvider = ({ children }) => {
     futureStateConfig,
     calculations,
     savedScenarios,
+	ntentData,
+    setNTENTData,
     timelineSummary,  // Export timeline for components to use
     setProfile,
     setCurrentState,

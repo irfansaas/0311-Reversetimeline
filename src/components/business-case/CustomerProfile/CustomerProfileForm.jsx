@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Building2, Users, MapPin, Calendar, Server, Shield } from 'lucide-react';
+import useCoachTriggers from '../../../hooks/useCoachTriggers';
+import TooltipCoach from '../../ui/TooltipCoach';
 
 /**
  * Customer Profile Form Component
  * Collects essential customer information for business case analysis
  */
 export default function CustomerProfileForm({ onComplete, initialData }) {
+  const coach = useCoachTriggers({ idleMs: 3500 });
   const [formData, setFormData] = useState({
     // Company Information
     companyName: initialData?.companyName || '',
@@ -152,7 +155,12 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
             <input
               type="text"
               value={formData.companyName}
-              onChange={(e) => handleInputChange('companyName', e.target.value)}
+              onChange={(e) => {
+                handleInputChange('companyName', e.target.value);
+                coach.onEdit('companyName');
+              }}
+              onFocus={() => coach.onFocus('companyName')}
+              onBlur={coach.onBlur}
               className={`w-full px-4 py-2 border-2 rounded-lg focus:outline-none ${
                 errors.companyName 
                   ? 'border-red-500 focus:border-red-600' 
@@ -162,6 +170,16 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
             />
             {errors.companyName && (
               <p className="text-red-600 text-sm mt-1">{errors.companyName}</p>
+            )}
+            {coach.hint?.id === 'companyName' && (
+              <TooltipCoach tone="next" ntentDimension="N">
+                <strong>Next Step:</strong> Use full legal entity name - this will appear on your MSA and PO
+              </TooltipCoach>
+            )}
+            {coach.shouldNudge('companyName') && (
+              <TooltipCoach tone="next" ntentDimension="N">
+                💡 Format: "Contoso Corporation" not just "Contoso"
+              </TooltipCoach>
             )}
           </div>
 

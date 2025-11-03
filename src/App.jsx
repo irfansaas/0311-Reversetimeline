@@ -3,6 +3,7 @@ import MainNavigation from './components/navigation/MainNavigation';
 import { BusinessCaseProvider } from './contexts/BusinessCaseContext';
 import BusinessCaseWizard from './components/business-case/BusinessCaseWizard';
 import TimelineCalculator from './components/TimelineCalculator';
+import QuickQualifierNTENT from './components/QuickQualifier/QuickQualifierNTENT';
 
 function App() {
   const [activeTab, setActiveTab] = useState('timeline');
@@ -21,6 +22,13 @@ function App() {
         {activeTab === 'business-case' && (
           <BusinessCaseProvider>
             <BusinessCaseWizard />
+          </BusinessCaseProvider>
+        )}
+        {activeTab === 'qualifier' && (
+          <BusinessCaseProvider>
+            <div className="container mx-auto px-4 py-8">
+              <QuickQualifierNTENT />
+            </div>
           </BusinessCaseProvider>
         )}
       </div>

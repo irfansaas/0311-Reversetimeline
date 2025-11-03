@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calculator, FileText, BarChart3 } from 'lucide-react';
+import { Calculator, FileText, BarChart3, Target } from 'lucide-react';
 
 export default function MainNavigation({ activeTab, onTabChange }) {
   const tabs = [
@@ -14,6 +14,12 @@ export default function MainNavigation({ activeTab, onTabChange }) {
       label: 'Business Case Builder',
       icon: FileText,
       description: 'Create TCO & ROI analysis'
+    },
+	{ 
+    id: 'qualifier', 
+    label: 'Quick Qualifier (NTENT)', 
+    icon: Target, 
+    description: 'NTENT scoring & stakeholders' 
     }
   ];
 
