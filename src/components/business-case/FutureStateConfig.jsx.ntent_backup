@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Cloud, HardDrive, Settings, Calendar } from 'lucide-react';
-import NTENTLegend from '../ui/NTENTLegend';
-import NTENTBadge from '../ui/NTENTBadge';
 import useCoachTriggers from '../../hooks/useCoachTriggers';
 import TooltipCoach from '../ui/TooltipCoach';
 

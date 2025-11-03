@@ -1,0 +1,21 @@
+FUTURE STATE CONFIG - NTENT Coaching
+
+=== USER DISTRIBUTION (around line 123) ===
+
+For each user type input (lightUsers, mediumUsers, heavyUsers), add coaching.
+
+Example for lightUsers:
+
+{coach.hint?.id === 'lightUsers' && (
+  <TooltipCoach tone="need" ntentDimension="N">
+    <strong>Need:</strong> Light users = Office apps, email, web only. Which user types deliver fastest ROI?
+  </TooltipCoach>
+)}
+
+And update onChange:
+  onChange={(e) => {
+    handleChange('lightUsers', parseInt(e.target.value) || 0);
+    coach.onEdit('lightUsers');
+  }}
+  onFocus={() => coach.onFocus('lightUsers')}
+  onBlur={coach.onBlur}

@@ -1,0 +1,42 @@
+CURRENT STATE CONFIG - NTENT Coaching
+
+=== 1. CURRENT ANNUAL COST (around line 135) ===
+
+Find the currentAnnualCost input and add:
+
+{coach.hint?.id === 'currentAnnualCost' && (
+  <TooltipCoach tone="need" ntentDimension="N">
+    <strong>Need:</strong> Rough order of magnitude OK. Which metric matters most to CFO: $ savings, risk, or speed?
+  </TooltipCoach>
+)}
+{coach.shouldNudge('currentAnnualCost') && (
+  <TooltipCoach tone="need">
+    💡 $50K vs $500K matters more than exact amount. Check last year's budget or ask finance
+  </TooltipCoach>
+)}
+
+And update handlers:
+  onChange={(e) => {
+    handleChange('currentAnnualCost', parseFloat(e.target.value) || 0);
+    coach.onEdit('currentAnnualCost');
+  }}
+  onFocus={() => coach.onFocus('currentAnnualCost')}
+  onBlur={coach.onBlur}
+
+=== 2. INFRASTRUCTURE COST (around line 149) ===
+
+Find infrastructureCost input and add:
+
+{coach.hint?.id === 'infrastructureCost' && (
+  <TooltipCoach tone="need" ntentDimension="N">
+    <strong>Need:</strong> Include hardware depreciation, data center costs, and maintenance contracts
+  </TooltipCoach>
+)}
+
+And update handlers:
+  onChange={(e) => {
+    handleChange('infrastructureCost', parseFloat(e.target.value) || 0);
+    coach.onEdit('infrastructureCost');
+  }}
+  onFocus={() => coach.onFocus('infrastructureCost')}
+  onBlur={coach.onBlur}

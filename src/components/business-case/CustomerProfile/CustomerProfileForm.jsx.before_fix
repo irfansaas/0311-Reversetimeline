@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import NTENTLegendCollapsible from '../../ui/NTENTLegendCollapsible';
 import { BUSINESS_CASE_NTENT_QUESTIONS } from '../../../constants/ntentQuestions';
+import NTENTLegendCollapsible from '../../ui/NTENTLegendCollapsible';
 import NTENTBadge from '../../ui/NTENTBadge';
+import { BUSINESS_CASE_NTENT_QUESTIONS } from '../../../constants/ntentQuestions';
 import { Building2, Users, MapPin, Calendar, Server, Shield } from 'lucide-react';
 import useCoachTriggers from '../../../hooks/useCoachTriggers';
 import TooltipCoach from '../../ui/TooltipCoach';
 import NTENTLegend from '../../ui/NTENTLegend';
+import NTENTBadge from '../../ui/NTENTBadge';
 
 /**
  * Customer Profile Form Component

@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
-import NTENTLegendCollapsible from '../../ui/NTENTLegendCollapsible';
-import { BUSINESS_CASE_NTENT_QUESTIONS } from '../../../constants/ntentQuestions';
-import NTENTBadge from '../../ui/NTENTBadge';
 import { Building2, Users, MapPin, Calendar, Server, Shield } from 'lucide-react';
 import useCoachTriggers from '../../../hooks/useCoachTriggers';
 import TooltipCoach from '../../ui/TooltipCoach';
-import NTENTLegend from '../../ui/NTENTLegend';
 
 /**
  * Customer Profile Form Component
@@ -144,7 +140,6 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <NTENTLegendCollapsible />
       {/* Company Information Section */}
       <div className="bg-white rounded-lg border border-gray-200 p-6">
         <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
@@ -156,7 +151,6 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Company Name *
-          <NTENTBadge dimension="next" tooltip="Use full legal entity name - appears on MSA/PO. Who signs contracts?" />
             </label>
             <input
               type="text"
@@ -192,7 +186,6 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Industry *
-          <NTENTBadge dimension="need" tooltip="What industry-specific compliance drives urgency? (HIPAA, PCI, SOX)" />
             </label>
             <select
               value={formData.industry}
@@ -249,7 +242,6 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Total Number of Users *
-          <NTENTBadge dimension="need" tooltip="How many users need access TODAY vs. next 12 months? What drives growth?" />
             </label>
             <input
               type="number"
@@ -271,7 +263,6 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               User Profile Type
-          <NTENTBadge dimension="risk" tooltip="What % are power users? GPU needs? What breaks their current setup?" />
             </label>
             <select
               value={formData.userProfile}
@@ -289,7 +280,6 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Number of Use Cases
-          <NTENTBadge dimension="need" tooltip="What are the TOP 3 use cases? Which one fails most often today?" />
             </label>
             <input
               type="number"
@@ -305,7 +295,6 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Number of Applications
-          <NTENTBadge dimension="risk" tooltip="How many are CRITICAL? How many tested in cloud? Which have no vendor support?" />
             </label>
             <input
               type="number"
@@ -374,7 +363,6 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
           <div className="md:col-span-2">
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Current Platform
-          <NTENTBadge dimension="risk" tooltip="What platform TODAY? What do they HATE about it? When does contract end?" />
             </label>
             <select
               value={formData.currentPlatform}
@@ -430,7 +418,6 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Planned Start Date
-          <NTENTBadge dimension="next" tooltip="What HAS to happen before you can start? Who needs to approve start?" />
             </label>
             <input
               type="date"
@@ -444,7 +431,6 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">   
               Target Go-Live Date
-          <NTENTBadge dimension="time" tooltip="What happens if you miss this date? Who set this deadline and why?" />
             </label>
             <input
               type="date"
@@ -457,7 +443,6 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">   
               Compelling Event
-          <NTENTBadge dimension="time" tooltip="Contract expiring? Data center closing? Compliance deadline? M&A activity?" />
             </label>
             <input
               type="text"
@@ -481,7 +466,6 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Primary Contact
-          <NTENTBadge dimension="teams" tooltip="Are they the champion? Do they control budget? Who is their boss?" />
             </label>
             <input
               type="text"
@@ -495,7 +479,6 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Technical Contact
-          <NTENTBadge dimension="teams" tooltip="Do they recommend or approve? What tech do they love/hate?" />
             </label>
             <input
               type="text"
@@ -509,7 +492,6 @@ export default function CustomerProfileForm({ onComplete, initialData }) {
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               Financial Contact
-          <NTENTBadge dimension="next" tooltip="Do they approve POs? What is their approval limit? When do they review?" />
             </label>
             <input
               type="text"

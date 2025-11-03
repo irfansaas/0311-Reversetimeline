@@ -1,0 +1,34 @@
+TIMELINE CALCULATOR - Go-Live Date Coaching
+
+Find the section around line 545-556 that looks like:
+
+<input
+  type="date"
+  value={formData.goLiveDate}
+  onChange={(e) => setFormData({...formData, goLiveDate: e.target.value})}
+  className="..."
+/>
+
+Replace with:
+
+<input
+  type="date"
+  value={formData.goLiveDate}
+  onChange={(e) => {
+    setFormData({...formData, goLiveDate: e.target.value});
+    coach.onEdit('goLiveDate');
+  }}
+  onFocus={() => coach.onFocus('goLiveDate')}
+  onBlur={coach.onBlur}
+  className="..."
+/>
+{coach.hint?.id === 'goLiveDate' && (
+  <TooltipCoach tone="time" ntentDimension="T">
+    <strong>Timing:</strong> What date is immovable (renewal, audit, end-of-support)? What happens if you miss it?
+  </TooltipCoach>
+)}
+{coach.shouldNudge('goLiveDate') && (
+  <TooltipCoach tone="time">
+    💡 Most AVD projects need 12-16 weeks. Consider blackout periods (holidays, fiscal close)
+  </TooltipCoach>
+)}

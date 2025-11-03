@@ -546,7 +546,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Go-Live Target Date (Compelling Event)
-                    <NTENTBadge dimension="time" tooltip="What date is immovable? What happens if you miss it?" />
                   </label>
                   <input
                     type="date"
@@ -558,7 +557,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Project Start Date
-                    <NTENTBadge dimension="next" tooltip="When can you realistically start?" />
                   </label>
                   <input
                     type="date"
@@ -580,7 +578,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Number of Users
-                    <NTENTBadge dimension="need" tooltip="How many users need AVD? Scale impacts timeline" />
                     <Tooltip id="users" content={tooltips.users} />
                   </label>
                   <select
@@ -596,7 +593,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Use Cases
-                    <NTENTBadge dimension="need" tooltip="Each use case adds complexity (Weight: 4 - HIGHEST)" />
                     <Tooltip id="useCases" content={tooltips.useCases} />
                   </label>
                   <select
@@ -622,7 +618,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     On-Prem to Cloud Migration
-                    <NTENTBadge dimension="risk" tooltip="Full migration adds infrastructure complexity" />
                     <Tooltip id="onPremToCloud" content={tooltips.onPremToCloud} />
                   </label>
                   <select
@@ -638,7 +633,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Citrix/VMware Cloud
-                    <NTENTBadge dimension="risk" tooltip="Migration from existing VDI platform" />
                     <Tooltip id="citrix" content={tooltips.citrix} />
                   </label>
                   <select
@@ -654,7 +648,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Citrix/VMware Hybrid
-                    <NTENTBadge dimension="risk" tooltip="Hybrid complexity adds testing time" />
                   </label>
                   <select
                     value={formData.citrixHybrid}
@@ -669,7 +662,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Citrix/VMware On-Prem
-                    <NTENTBadge dimension="risk" tooltip="On-prem requires parallel testing" />
                   </label>
                   <select
                     value={formData.citrixOnPrem}
@@ -684,7 +676,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Cloud Platform
-                    <NTENTBadge dimension="edu" tooltip="Azure is native for AVD. GCP/AWS adds complexity" />
                     <Tooltip id="cloud" content={tooltips.cloud} />
                   </label>
                   <select
@@ -700,7 +691,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Azure Landing Zone
-                    <NTENTBadge dimension="next" tooltip="Existing landing zone saves 2-3 weeks" />
                     <Tooltip id="landingZone" content={tooltips.landingZone} />
                   </label>
                   <select
@@ -716,7 +706,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Operating Systems
-                    <NTENTBadge dimension="risk" tooltip="Legacy OS requires upgrade/compatibility testing" />
                     <Tooltip id="os" content={tooltips.os} />
                   </label>
                   <select
@@ -742,7 +731,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Change Control Process
-                    <NTENTBadge dimension="risk" tooltip="How fast can you get approvals? Directly impacts velocity" />
                     <Tooltip id="changeControl" content={tooltips.changeControl} />
                   </label>
                   <select
@@ -758,7 +746,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Security Review Process
-                    <NTENTBadge dimension="risk" tooltip="Security reviews gate deployments and add approval cycles" />
                     <Tooltip id="security" content={tooltips.security} />
                   </label>
                   <select
@@ -784,7 +771,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Number of Applications
-                    <NTENTBadge dimension="risk" tooltip="More apps = more testing, packaging, validation" />
                     <Tooltip id="apps" content={tooltips.apps} />
                   </label>
                   <select
@@ -800,7 +786,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     App Modernization Required?
-                    <NTENTBadge dimension="risk" tooltip="10x WEIGHT! Single biggest timeline factor - what could kill this?" />
                     <Tooltip id="modernization" content={tooltips.modernization} />
                   </label>
                   <select
@@ -816,7 +801,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Backend System Connections
-                    <NTENTBadge dimension="risk" tooltip="Backend connections affect network design and latency" />
                     <Tooltip id="backend" content={tooltips.backend} />
                   </label>
                   <select
@@ -832,7 +816,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Peripheral Device Requirements
-                    <NTENTBadge dimension="risk" tooltip="Peripherals need special drivers and testing" />
                     <Tooltip id="peripherals" content={tooltips.peripherals} />
                   </label>
                   <select
@@ -848,7 +831,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Cloud Testing Status
-                    <NTENTBadge dimension="edu" tooltip="Prior cloud testing reduces unknowns" />
                     <Tooltip id="cloudTesting" content={tooltips.cloudTesting} />
                   </label>
                   <select
@@ -864,7 +846,6 @@ setResults({
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Last Application Modernization
-                    <NTENTBadge dimension="risk" tooltip="Recent modernization = less technical debt" />
                     <Tooltip id="lastMod" content={tooltips.lastMod} />
                   </label>
                   <select

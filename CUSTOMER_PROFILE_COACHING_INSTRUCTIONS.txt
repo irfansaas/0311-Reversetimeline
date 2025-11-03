@@ -1,0 +1,103 @@
+CUSTOMER PROFILE FORM - Additional NTENT Coaching
+
+The coach hook is already initialized. Add these coaching blocks:
+
+=== 1. TOTAL USERS (around line 238) ===
+
+Find:
+<input
+  type="number"
+  value={formData.totalUsers}
+  onChange={(e) => setFormData({...formData, totalUsers: parseInt(e.target.value)})}
+  placeholder="1000"
+/>
+
+Add after the input (before closing </div>):
+
+{coach.hint?.id === 'totalUsers' && (
+  <TooltipCoach tone="need" ntentDimension="N">
+    <strong>Need:</strong> How many users need AVD (not total employees)? Which user types need it most urgently?
+  </TooltipCoach>
+)}
+{coach.shouldNudge('totalUsers') && (
+  <TooltipCoach tone="need">
+    💡 Include: knowledge workers + power users + CAD/engineering. Typical: 70% light, 25% medium, 5% heavy
+  </TooltipCoach>
+)}
+
+And update onChange:
+  onChange={(e) => {
+    setFormData({...formData, totalUsers: parseInt(e.target.value)});
+    coach.onEdit('totalUsers');
+  }}
+  onFocus={() => coach.onFocus('totalUsers')}
+  onBlur={coach.onBlur}
+
+=== 2. CRITICAL APPS (around line 272) ===
+
+Find the criticalApps input and add:
+
+{coach.hint?.id === 'criticalApps' && (
+  <TooltipCoach tone="risk" ntentDimension="R">
+    <strong>Risk:</strong> Which 3-5 apps are business-critical and need compatibility testing?
+  </TooltipCoach>
+)}
+{coach.shouldNudge('criticalApps') && (
+  <TooltipCoach tone="risk">
+    💡 Office 365 doesn't count - it's always compatible. Focus on LOB apps
+  </TooltipCoach>
+)}
+
+And update the input handlers:
+  onChange={(e) => {
+    handleInputChange('criticalApps', parseInt(e.target.value));
+    coach.onEdit('criticalApps');
+  }}
+  onFocus={() => coach.onFocus('criticalApps')}
+  onBlur={coach.onBlur}
+
+=== 3. TIMELINE CONSTRAINTS (around line 434) ===
+
+Find timelineConstraints input and add:
+
+{coach.hint?.id === 'timelineConstraints' && (
+  <TooltipCoach tone="time" ntentDimension="T">
+    <strong>Timing:</strong> What's your immovable deadline? Include date AND consequence
+  </TooltipCoach>
+)}
+{coach.shouldNudge('timelineConstraints') && (
+  <TooltipCoach tone="time">
+    💡 Format: "Citrix renewal Sept 30 - $500K penalty if missed"
+  </TooltipCoach>
+)}
+
+And update handlers:
+  onChange={(e) => {
+    handleInputChange('timelineConstraints', e.target.value);
+    coach.onEdit('timelineConstraints');
+  }}
+  onFocus={() => coach.onFocus('timelineConstraints')}
+  onBlur={coach.onBlur}
+
+=== 4. EXECUTIVE SPONSOR (around line 457) ===
+
+Find executiveSponsor input and add:
+
+{coach.hint?.id === 'executiveSponsor' && (
+  <TooltipCoach tone="teams" ntentDimension="T">
+    <strong>Teams:</strong> Who must say 'yes' to move from pilot → rollout?
+  </TooltipCoach>
+)}
+{coach.shouldNudge('executiveSponsor') && (
+  <TooltipCoach tone="teams">
+    💡 Include title and approval order: "Jane Smith, VP IT (after CFO sign-off)"
+  </TooltipCoach>
+)}
+
+And update handlers:
+  onChange={(e) => {
+    handleInputChange('executiveSponsor', e.target.value);
+    coach.onEdit('executiveSponsor');
+  }}
+  onFocus={() => coach.onFocus('executiveSponsor')}
+  onBlur={coach.onBlur}

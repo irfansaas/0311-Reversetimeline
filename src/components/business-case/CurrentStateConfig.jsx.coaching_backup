@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import { Server, DollarSign, AlertCircle } from 'lucide-react';
-import NTENTLegend from '../ui/NTENTLegend';
-import NTENTBadge from '../ui/NTENTBadge';
-import useCoachTriggers from '../../hooks/useCoachTriggers';
-import TooltipCoach from '../ui/TooltipCoach';
 
 export default function CurrentStateConfig({ customerProfile, onComplete, onBack }) {
-  const coach = useCoachTriggers({ idleMs: 3500 });
   const [config, setConfig] = useState({
     platform: customerProfile.currentPlatform || 'citrix',
     serverCount: customerProfile.currentServerCount || 10,
