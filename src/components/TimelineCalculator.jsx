@@ -26,7 +26,7 @@ export default function TimelineCalculator() {
     }
 
     const answeredCount = Object.keys(answers).length;
-    if (answeredCount < 21) {
+    if (answeredCount < 19) {
       alert(`Please answer all questions (${answeredCount}/21 answered)`);
       return;
     }
@@ -136,7 +136,7 @@ export default function TimelineCalculator() {
         <h2 className="text-xl font-bold mb-4">Discovery Questions</h2>
         <p className="text-sm text-gray-600 mb-4">
           Walk through these questions WITH your customer during discovery.
-          Answered: {Object.keys(answers).length}/21
+          Answered: {Object.keys(answers).length}/19
         </p>
 
         <div className="space-y-6">
