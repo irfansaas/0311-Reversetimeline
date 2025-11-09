@@ -305,12 +305,12 @@ export function calculateRichardTimeline(answers, goLiveDate, appTransformComple
   
   // STEP 3: Convert bucket complexities to durations (weeks)
   const durations = {
-    bucket1: Math.round(buckets.bucket1),
-    bucket2: Math.round(buckets.bucket2),
-    bucket3: Math.max(1, Math.round(buckets.bucket3)), // Minimum 1 week
-    bucket4: Math.round(buckets.bucket4),
-    bucket5: Math.round(buckets.bucket5),
-    bucket6: Math.round(buckets.bucket6)
+    bucket1: Math.round(buckets.bucket1 / 5),
+    bucket2: Math.round(buckets.bucket2 / 5),
+    bucket3: Math.max(1, Math.round(buckets.bucket3 / 5)), // Minimum 1 week
+    bucket4: Math.round(buckets.bucket4 / 5),
+    bucket5: Math.round(buckets.bucket5 / 5),
+    bucket6: Math.round(buckets.bucket6 / 5)
   };
   
   // STEP 4: Calculate parallel execution (KEY INSIGHT from Richard's Excel)
@@ -374,7 +374,7 @@ function scoreQuestion(questionId, answer, d6Score = null, d25Score = null) {
   // Handle Yes/No migration questions (D10-D13)
   if (question.isYesNo) {
     const score = answer === 'Yes' ? question.yesScore : question.noScore;
-    const weight = d6Score && d25Score ? d6Score.score * d25Score.score : 0;
+    const weight = answer === 'Yes' && d6Score && d25Score ? d6Score.score * d25Score.score : 0;
     return {
       score,
       weight,
@@ -398,46 +398,65 @@ function scoreQuestion(questionId, answer, d6Score = null, d25Score = null) {
 }
 
 /**
- * Calculate bucket complexities from scored questions
- * This implements Richard's bucket formula logic EXACTLY
+ * Calculate bucket complexities
+ * FINAL CORRECTED VERSION - Verified against Excel formulas
+ * 
+ * Excel row mapping to our question IDs:
+ * D5→D6, D6→D8, D7→D9, D10→D10, D11→D11, D12→D12, D13→D13,
+ * D14→D15, D15→D16, D16→D17, D19→D19, D22→D21,
+ * D25→D23, D26→D24, D27→D26, D28→D27, D29→D28, D30→D29
  */
 function calculateBucketComplexities(scores, answers) {
   const buckets = {};
   
-  // Bucket 1: SPECIAL LOGIC based on D26 answer
-  if (answers.D26 === 'No') {
-    // Formula: SUM(D23, D24, D27, D28, D29) only
-    buckets.bucket1 = ['D23', 'D24', 'D27', 'D28', 'D29']
+  // Bucket 1: Apps Transform
+  // Excel: IF(D26=2, (D30+D27+D26+D25+D7+D29)/5, (D30+D27+D26+D10+D11+D12+D25+D13+D7)/5)
+  // D26→D24, D30→D29, D27→D26, D25→D23, D7→D9, D29→D28, D10→D10, D11→D11, D12→D12, D13→D13
+  if (scores.D24.weighted !== 4) {
+    // When D24 score = 2: Use simpler formula (NO app modernization)
+    // D29, D26, D24, D23, D9, D28
+    buckets.bucket1 = ['D29', 'D26', 'D24', 'D23', 'D9', 'D28']
       .reduce((sum, qId) => sum + (scores[qId]?.weighted || 0), 0);
   } else {
-    // Formula: SUM(D8, D9, D10, D11, D12, D13, D17, D23, D24, D26, D27, D28, D29)
-    buckets.bucket1 = ['D8', 'D9', 'D10', 'D11', 'D12', 'D13', 'D17', 'D23', 'D24', 'D26', 'D27', 'D28', 'D29']
+    // When D24 score ≠ 2: Use complex formula (WITH migration questions)
+    // D29, D26, D24, D10, D11, D12, D23, D13, D9
+    buckets.bucket1 = ['D29', 'D26', 'D24', 'D10', 'D11', 'D12', 'D23', 'D13', 'D9']
       .reduce((sum, qId) => sum + (scores[qId]?.weighted || 0), 0);
   }
   
-  // Bucket 2: SUM(D10, D11, D12, D13, D15, D16, D19, D21)
-  buckets.bucket2 = ['D10', 'D11', 'D12', 'D13', 'D15', 'D16', 'D19', 'D21']
+  // Bucket 2: Azure Prep
+  // Excel: (D19+D15+D14)/5
+  // D19→D19, D15→D16, D14→D15
+  buckets.bucket2 = ['D19', 'D16', 'D15']
     .reduce((sum, qId) => sum + (scores[qId]?.weighted || 0), 0);
   
-  // Bucket 3: SUM(D19, D21) with minimum 1 week
+  // Bucket 3: Nerdio Deploy
+  // Excel: IF((D19+D22)/5<1, 1, (D19+D22)/5)
+  // D19→D19, D22→D21
   buckets.bucket3 = ['D19', 'D21']
     .reduce((sum, qId) => sum + (scores[qId]?.weighted || 0), 0);
   
-  // Bucket 4: SUM(D8, D9, D17, D19)
-  buckets.bucket4 = ['D8', 'D9', 'D17', 'D19']
+  // Bucket 4: AVD Design
+  // Excel: (D28+D27+D26+D25+D7+D16)/5
+  // D28→D27, D27→D26, D26→D24, D25→D23, D7→D9, D16→D17
+  buckets.bucket4 = ['D27', 'D26', 'D24', 'D23', 'D9', 'D17']
     .reduce((sum, qId) => sum + (scores[qId]?.weighted || 0), 0);
   
-  // Bucket 5: SUM(D8, D9)
-  buckets.bucket5 = ['D8', 'D9']
+  // Bucket 5: Pilot
+  // Excel: (D30+D29+D28+D25+D19+D7)/5
+  // D30→D29, D29→D28, D28→D27, D25→D23, D19→D19, D7→D9
+  buckets.bucket5 = ['D29', 'D28', 'D27', 'D23', 'D19', 'D9']
     .reduce((sum, qId) => sum + (scores[qId]?.weighted || 0), 0);
   
-  // Bucket 6: SUM(D8, D9)
-  buckets.bucket6 = ['D8', 'D9']
+  // Bucket 6: Migration
+  // Excel: (D19+D6+D7+D25)/5
+  // D19→D19, D6→D8, D7→D9, D25→D23
+  buckets.bucket6 = ['D19', 'D8', 'D9', 'D23']
     .reduce((sum, qId) => sum + (scores[qId]?.weighted || 0), 0);
   
   return buckets;
 }
-
+// REPLACE the entire calculateBucketComplexities function in your engine with this!
 /**
  * Calculate parallel execution adjustment
  * THE KEY INSIGHT: Azure prep can start BEFORE apps are 100% complete
