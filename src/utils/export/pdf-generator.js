@@ -1072,10 +1072,10 @@ if (calculations.timeline) {
   doc.setTextColor(...colors.info);
   doc.setFontSize(11);
   doc.setFont('helvetica', 'bold');
-  doc.text('⚡ Parallel Execution:', margin + 5, currentY + 10);
+  doc.text('Parallel Execution:', margin + 5, currentY + 10);
   doc.setTextColor(...colors.dark);
   doc.setFont('helvetica', 'normal');
-  doc.text(timelineData.parallelExecution.description, margin + 55, currentY + 10);
+  doc.text(timelineData.parallelExecution.description, margin + 100, currentY + 10);
 }
 
 
