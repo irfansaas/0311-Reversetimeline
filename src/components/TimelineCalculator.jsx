@@ -384,7 +384,7 @@ function QuestionCard({ questionId, question, currentAnswer, onAnswer }) {
         ))}
       </select>
       
-      {currentAnswer && question.options[currentAnswer] && (
+      {currentAnswer && question.options[currentAnswer] && question.options[currentAnswer].weight && (
         <div className="mt-3 p-2 bg-blue-50 rounded text-xs">
           <div className="flex justify-between items-center text-gray-700">
             <span>Score: <strong>{question.options[currentAnswer].score}</strong></span>
