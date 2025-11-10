@@ -1,6 +1,7 @@
 import { jsPDF } from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { formatCurrency, formatPercentage } from '../business-case/cost-calculator';
+import { generateTimelinePDFData, addTimelineToPDF, addTimelineVisualToPDF } from './timeline-pdf-export';
 
 // Polyfill: Ensure autoTable is available as a method on jsPDF instances
 if (!jsPDF.API.autoTable && autoTable) {
@@ -989,6 +990,28 @@ export function generateBusinessCasePDF(calculations) {
   // ============================================
   addPage();
   
+  // ============================================================================
+// PAGE 8: IMPLEMENTATION TIMELINE (if timeline data exists)
+// ============================================================================
+if (calculations.timeline) {
+  addPage();
+  
+  // Generate timeline data
+  const timelineData = generateTimelinePDFData(calculations.timeline);
+  
+  // Add timeline section
+  let yPos = 30;
+  yPos = addTimelineToPDF(doc, timelineData, yPos);
+  
+  // Add visual timeline if space available
+  if (yPos < 200) {
+    yPos += 10;
+    addTimelineVisualToPDF(doc, timelineData, yPos);
+  }
+}
+
+
+  
   // Page header
   doc.setFillColor(...colors.success);
   try {
@@ -1147,5 +1170,25 @@ export function generateBusinessCasePDF(calculations) {
     doc.text('www.getnerdio.com', pageWidth / 2, footerY + 16, { align: 'center' });
   } catch(e) { /* skip */ }
   
+  // ============================================================================
+  // PAGE 8: IMPLEMENTATION TIMELINE (if timeline data exists)
+  // ============================================================================
+  if (calculations.timeline) {
+    addPage();
+    
+    // Generate timeline data
+    const timelineData = generateTimelinePDFData(calculations.timeline);
+    
+    // Add timeline section
+    let yPos = 30;
+    yPos = addTimelineToPDF(doc, timelineData, yPos);
+    
+    // Add visual timeline if space available
+    if (yPos < 200) {
+      yPos += 10;
+      addTimelineVisualToPDF(doc, timelineData, yPos);
+    }
+  }
+
   return doc;
 }

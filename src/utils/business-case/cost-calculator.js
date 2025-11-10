@@ -135,7 +135,7 @@ export function calculateCurrentStateCost(params) {
   let annualCost = 0;
   let breakdown = {};
 
-  switch (platform.toLowerCase()) {
+  switch ((platform || "citrix").toLowerCase()) {
     case 'citrix': {
       const citrixLicense = pricingData.citrixComparison.citrixCloudLicense.perUserPerMonth;
       const citrixLicenseCost = userCount * citrixLicense;

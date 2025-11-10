@@ -49,10 +49,10 @@ export function calculateBusinessCaseFull(
 
   // 2. Calculate Current State Costs
   const currentStateCosts = calculateCurrentStateCost(
-    currentState.platform,
-    currentState.userCount,
-    currentState.serverCount,
-    currentState.customCosts
+    currentState.platform || "citrix",
+    currentState.userCount || 0,
+    currentState.serverCount || 0,
+    currentState.customCosts || {}
   );
 
   // 3. Calculate Future State (AVD) Costs
@@ -94,7 +94,7 @@ export function calculateBusinessCaseFull(
     customerProfile,
     timeline,
     currentState: {
-      platform: currentState.platform,
+      platform: currentState.platform || "citrix",
       costs: currentStateCosts
     },
     futureState: {

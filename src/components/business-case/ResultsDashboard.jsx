@@ -61,8 +61,8 @@ export default function ResultsDashboard({ calculations, onSave, onStartNew, onB
     customerProfile,
     currentState,
     futureState,
-    tcoAnalysis,
-    roiAnalysis,
+    tco: tcoAnalysis,
+    roi: roiAnalysis,
     implementationCost
   } = calculations;
 
