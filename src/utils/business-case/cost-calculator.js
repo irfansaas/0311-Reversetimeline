@@ -214,8 +214,8 @@ export function calculateCurrentStateCost(params) {
  * Calculate Total Cost of Ownership comparison
  */
 export function calculateTCO(currentState, futureState, timeHorizonYears = 3) {
-  const currentAnnual = currentState.costs.annual;
-  const futureAnnual = futureState.totals.annualNet;
+  const currentAnnual = currentState?.costs?.annual || 0;
+  const futureAnnual = futureState?.totals?.annualNet || 0;
   
   const currentTotal = currentAnnual * timeHorizonYears;
   const futureTotal = futureAnnual * timeHorizonYears;

@@ -48,21 +48,22 @@ export function calculateBusinessCaseFull(
   }
 
   // 2. Calculate Current State Costs
-  const currentStateCosts = calculateCurrentStateCost(
-    currentState.platform || "citrix",
-    currentState.userCount || 0,
-    currentState.serverCount || 0,
-    currentState.customCosts || {}
-  );
+  console.log("VE Engine - currentState:", currentState);
+  const currentStateCosts = calculateCurrentStateCost({
+    platform: currentState.platform || "citrix",
+    userCount: currentState.userCount || 0,
+    serverCount: currentState.serverCount || 0,
+    customCosts: currentState.customCosts || {}
+  });
 
   // 3. Calculate Future State (AVD) Costs
-  const futureStateCosts = calculateAVDInfrastructureCost(
-    futureState.userCount,
-    futureState.userProfile,
-    futureState.storageType,
-    futureState.storagePerUserGB,
-    futureState.includeNerdio
-  );
+  const futureStateCosts = calculateAVDInfrastructureCost({
+    userCount: futureState.userCount,
+    userProfile: futureState.userProfile,
+    storageType: futureState.storageType,
+    storagePerUserGB: futureState.storagePerUserGB,
+    includeNerdio: futureState.includeNerdio
+  });
 
   // 4. Calculate TCO
   const tco = calculateTCO(
@@ -98,8 +99,8 @@ export function calculateBusinessCaseFull(
       costs: currentStateCosts
     },
     futureState: {
-      config: futureState,
-      costs: futureStateCosts
+      ...futureStateCosts,
+      config: futureState
     },
     tco,
     roi,
