@@ -79,16 +79,13 @@ export function calculateBusinessCaseFull(
   );
 
   // 6. Calculate ROI
-  const roi = calculateComprehensiveROI(
-    currentStateCosts,
-    futureStateCosts,
-    implementationCost,
-    timeHorizonYears,
-    {
-      productivityGainPercent: futureState.productivityGain || 15,
-      downtimeReductionPercent: futureState.downtimeReduction || 30
-    }
-  );
+  const roi = calculateComprehensiveROI({
+    userCount: futureState.userCount,
+    infrastructureSavings: tco.savings.annual,
+    implementationCost: implementationCost.totalCost,
+    currentState: currentStateCosts,
+    timeHorizonYears
+  });
 
   // 7. Combine everything
   return {
@@ -96,7 +93,7 @@ export function calculateBusinessCaseFull(
     timeline,
     currentState: {
       platform: currentState.platform || "citrix",
-      costs: currentStateCosts
+      ...currentStateCosts
     },
     futureState: {
       ...futureStateCosts,

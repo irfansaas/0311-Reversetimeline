@@ -10,35 +10,28 @@
  */
 export function generateTimelinePDFData(timelineResults) {
   if (!timelineResults) return null;
-
-  const { durations, validation, timeline, parallelExecution, metadata } = timelineResults;
-
+  
+  const { phases, totals, validity, overlap } = timelineResults;
+  
   return {
     summary: {
-      totalWeeks: validation.totalWeeksNeeded,
-      weeksAvailable: metadata.weeksToGoLive.toFixed(1),
-      isFeasible: validation.isValid,
-      buffer: validation.variance.toFixed(1),
-      variancePercent: validation.variancePercent.toFixed(0),
-      recommendation: validation.recommendation
+      totalWeeks: totals.parallelizedWeeks,
+      weeksAvailable: timelineResults.weeksToGoLive || 0,
+      isFeasible: validity >= 0,
+      buffer: validity,
+      recommendation: validity >= 0 
+        ? `✅ Feasible: ${validity} weeks of buffer` 
+        : `⚠️ Tight: ${Math.abs(validity)} weeks short`
     },
-    phases: [
-      { name: 'Apps Transform', weeks: durations.bucket1, description: 'Application inventory, packaging, and modernization' },
-      { name: 'Azure Prep', weeks: durations.bucket2, description: 'Identities, networking, subscriptions, Azure setup' },
-      { name: 'Nerdio Deploy', weeks: durations.bucket3, description: 'Install and configure Nerdio Manager for AVD' },
-      { name: 'AVD Design', weeks: durations.bucket4, description: 'Host pools, images, storage, testing' },
-      { name: 'Pilot', weeks: durations.bucket5, description: 'Pilot users, feedback, refinement' },
-      { name: 'Migration', weeks: durations.bucket6, description: 'Production rollout and migration' }
-    ],
+    phases: phases.items.map(p => ({
+      name: p.label,
+      weeks: p.weeks,
+      description: p.label
+    })),
     parallelExecution: {
       enabled: true,
-      description: `Azure environment prep begins ${parallelExecution.azureStartDelay.toFixed(1)} weeks into app transformation (when ${parallelExecution.appCompletionPercent}% complete)`
-    },
-    goLiveDate: metadata.goLiveDate.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    })
+      description: `Phases can run in parallel, saving ${overlap.overlappedCredit} weeks`
+    }
   };
 }
 

@@ -24,7 +24,7 @@ if (typeof jsPDF.API.autoTable === 'undefined' && autoTable) {
  */
 export function generateBusinessCasePDF(calculations) {
   const doc = new jsPDF('p', 'mm', 'letter');
-  const { customerProfile, currentState, futureState, tcoAnalysis, roiAnalysis, implementationCost } = calculations;
+  const { customerProfile, currentState, futureState, tco: tcoAnalysis, roi: roiAnalysis, implementationCost } = calculations;
   
   // Brand colors (RGB)
   const colors = {
@@ -988,26 +988,94 @@ export function generateBusinessCasePDF(calculations) {
   // ============================================
   // PAGE 8: CALL TO ACTION
   // ============================================
-  addPage();
-  
-  // ============================================================================
-// PAGE 8: IMPLEMENTATION TIMELINE (if timeline data exists)
-// ============================================================================
 if (calculations.timeline) {
   addPage();
   
-  // Generate timeline data
   const timelineData = generateTimelinePDFData(calculations.timeline);
+  if (!timelineData) return doc;
   
-  // Add timeline section
-  let yPos = 30;
-  yPos = addTimelineToPDF(doc, timelineData, yPos);
+  // Page header
+  doc.setFillColor(...colors.info);
+  doc.rect(0, 0, pageWidth, 25, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Implementation Timeline', margin, 15);
   
-  // Add visual timeline if space available
-  if (yPos < 200) {
-    yPos += 10;
-    addTimelineVisualToPDF(doc, timelineData, yPos);
-  }
+  currentY = 35;
+  
+  // Feasibility status box
+  const statusColor = timelineData.summary.isFeasible ? colors.success : colors.warning;
+  doc.setFillColor(...statusColor);
+  doc.roundedRect(margin, currentY, 60, 15, 3, 3, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'bold');
+  doc.text(timelineData.summary.isFeasible ? '✓ FEASIBLE' : '⚠ TIGHT', margin + 30, currentY + 10, { align: 'center' });
+  
+  // Timeline metrics
+  doc.setTextColor(...colors.dark);
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Total Duration: ${timelineData.summary.totalWeeks} weeks`, margin + 70, currentY + 5);
+  doc.text(`Weeks Available: ${timelineData.summary.weeksAvailable}`, margin + 70, currentY + 12);
+  
+  const bufferText = timelineData.summary.buffer >= 0 
+    ? `Buffer: ${timelineData.summary.buffer} weeks` 
+    : `Short by: ${Math.abs(timelineData.summary.buffer)} weeks`;
+  doc.text(bufferText, pageWidth - margin - 50, currentY + 8);
+  
+  currentY += 25;
+  
+  // Recommendation
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'italic');
+  doc.setTextColor(100, 100, 100);
+  doc.text(timelineData.summary.recommendation, margin, currentY);
+  currentY += 15;
+  
+  // Phase table header
+  doc.setFillColor(...colors.info);
+  doc.rect(margin, currentY, pageWidth - 2 * margin, 10, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Phase', margin + 3, currentY + 7);
+  doc.text('Duration', margin + 90, currentY + 7);
+  doc.text('Description', margin + 120, currentY + 7);
+  currentY += 10;
+  
+  // Phase rows
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...colors.dark);
+  timelineData.phases.forEach((phase, idx) => {
+    // Alternating row colors
+    if (idx % 2 === 0) {
+      doc.setFillColor(248, 248, 248);
+      doc.rect(margin, currentY, pageWidth - 2 * margin, 12, 'F');
+    }
+    
+    doc.setFontSize(10);
+    doc.text(phase.name, margin + 3, currentY + 8);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`${phase.weeks} weeks`, margin + 90, currentY + 8);
+    doc.setFont('helvetica', 'normal');
+    doc.text(phase.description.substring(0, 40), margin + 120, currentY + 8);
+    currentY += 12;
+  });
+  
+  currentY += 10;
+  
+  // Parallel execution note
+  doc.setFillColor(240, 249, 255);
+  doc.roundedRect(margin, currentY, pageWidth - 2 * margin, 15, 3, 3, 'F');
+  doc.setTextColor(...colors.info);
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'bold');
+  doc.text('⚡ Parallel Execution:', margin + 5, currentY + 10);
+  doc.setTextColor(...colors.dark);
+  doc.setFont('helvetica', 'normal');
+  doc.text(timelineData.parallelExecution.description, margin + 55, currentY + 10);
 }
 
 
@@ -1016,6 +1084,9 @@ if (calculations.timeline) {
   doc.setFillColor(...colors.success);
   try {
     doc.rect(0, 0, pageWidth, 25, 'F');
+
+  // Start new page for Next Steps
+  addPage();
   } catch(e) { /* skip */ }
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(20);
@@ -1171,24 +1242,6 @@ if (calculations.timeline) {
   } catch(e) { /* skip */ }
   
   // ============================================================================
-  // PAGE 8: IMPLEMENTATION TIMELINE (if timeline data exists)
-  // ============================================================================
-  if (calculations.timeline) {
-    addPage();
-    
-    // Generate timeline data
-    const timelineData = generateTimelinePDFData(calculations.timeline);
-    
-    // Add timeline section
-    let yPos = 30;
-    yPos = addTimelineToPDF(doc, timelineData, yPos);
-    
-    // Add visual timeline if space available
-    if (yPos < 200) {
-      yPos += 10;
-      addTimelineVisualToPDF(doc, timelineData, yPos);
-    }
-  }
 
   return doc;
 }
